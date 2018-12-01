@@ -114,12 +114,13 @@ app.use(
 app.use('/api/users', authenticateRoutes); //register and login
 
 if(process.env.NODE_ENV === 'production') {
-  //Express will server up production assets like main.js, main.css file
-  app.use(express.static('client/build'));
-  //Express will server index.html file if it doesn't recognize the route
   const path = require('path');
+  //Express will server up production assets like main.js, main.css file
+  app.use(express.static(path.join(__dirname, 'client/build')));
+  //Express will server index.html file if it doesn't recognize the route
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    //res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
   });
 }
 
