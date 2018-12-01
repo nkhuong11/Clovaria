@@ -1,0 +1,39 @@
+i.Nav {
+  background-color: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.0975);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+  -webkit-transition: height 0.2s ease-in-out;
+  transition: height 0.2s ease-in-out;
+  height: 77px;
+}
+
+.Nav-menus {
+  display: flex;
+  flex-direction: row;
+  height: 77px;
+  width: 70%;
+  margin: 0 auto;
+  padding: 26px 40px;
+}
+
+.Nav-brand-logo {
+  display: block;
+  background-position: 0px 0px;
+  background-image: url(../../gallery/icon.png);
+  background-size: 50px 50px;
+  background-repeat: no-repeat;
+  height: 50px;
+  width: 50px;
+  text-indent: -1000%
+}
+.Nav-profile {
+  display: block;
+  background-image: url(../../gallery/profile_icon.png);
+  background-size: 30px 30px;
+  background-repeat: no-repeat;
+  height: 30px;
+  width: 30px;
+}

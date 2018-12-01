@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    color: #262626;
+    flex-grow: 1;
+    justify-content: center;
+    margin-top: 12px;
+    max-width: 350px;
+    width: 100%;
+}
+.brandName {
+    margin: 22px auto 12px;
+    height: 51px;
+    width: 175px;
+}
+
+.inputForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Wrapper {
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 1px;
+    margin: 0 0 10px;
+    padding: 10px 0;
+}
