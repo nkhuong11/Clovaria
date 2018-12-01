@@ -113,11 +113,6 @@ app.use(
 //Routes
 app.use('/api/users', authenticateRoutes); //register and login
 
-app.get('/', function(req, res) {
-    res.send('hello');
-});
-
-
 if(process.env.NODE_ENV === 'production') {
   //Express will server up production assets like main.js, main.css file
   app.use(express.static('client/build'));
