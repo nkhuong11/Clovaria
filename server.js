@@ -4,16 +4,13 @@ const { buildSchema } = require('graphql');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
-
 const keys = require('./config/keys');
 require('./models/User');
 
 //import routes
 authenticateRoutes = require('./routes/authenticate');
-
+uploadRoutes = require('./routes/uploadRoutes');
 //passport.use(new GoogleStrategy());
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true }).then(
   () => {console.log('Database is connected') },
@@ -99,6 +96,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+
 app.use(passport.initialize())
 require('./services/passport')(passport);
 app.use(
@@ -112,6 +110,7 @@ app.use(
 
 //Routes
 app.use('/api/users', authenticateRoutes); //register and login
+app.use('/api/upload', uploadRoutes);
 
 if(process.env.NODE_ENV === 'production') {
   const path = require('path');

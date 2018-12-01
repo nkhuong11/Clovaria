@@ -34,6 +34,7 @@ import Navbar from './components/Navbar/Navbar';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
+import ProfilePage from './pages/ProfilePage';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -60,6 +61,7 @@ class App extends Component {
                 <div className="container">
                   <Route exact path="/register" component={ RegisterPage } />
                   <Route exact path="/login" component={ LoginPage } />
+                  <Route exact path="/profile" component={ ProfilePage } />
                 </div>
             </div>
           </Router>

@@ -40,7 +40,7 @@ class LoginPage extends Component {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.auth.isAuthenticated) {
-            this.props.history.push('/')
+            this.props.history.push('/profile')
         }
         if(nextProps.errors) {
             this.setState({
@@ -98,7 +98,8 @@ LoginPage.propTypes = {
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
-    errors: state.errors
+    errors: state.errors,
+    user: state.user
 })
 
 export  default connect(mapStateToProps, { loginUser })(LoginPage)

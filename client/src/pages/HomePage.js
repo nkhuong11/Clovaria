@@ -16,6 +16,8 @@ class HomePage extends Component {
     }
 
     render() {
+        // console.log(this.props.auth.isAuthenticated)
+        // console.log(this.props.auth.user)
         return (
             <div>
                 Home Page

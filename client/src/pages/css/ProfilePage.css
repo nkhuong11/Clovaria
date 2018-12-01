@@ -1,0 +1,51 @@
+.profile-header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 44px;
+}
+.XjzKX {
+    margin-right: 80px;
+}
+
+.XoHvYU {
+    height: 100%;
+    width: 100%;
+}
+
+.be6sR {
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+
+.avatar-container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 152px;
+    width: 152px;
+}
+
+.avatar-image {
+    background-color: #fafafa;
+    border-radius: 50%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.fDxYl {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #262626;
+    font-weight: 300;
+    font-size: 28px;
+    line-height: 32px;
+    margin: -5px 0 -6px;
+}
