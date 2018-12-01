@@ -112,9 +112,6 @@ app.use(
 
 //Routes
 app.use('/api/users', authenticateRoutes); //register and login
-app.get('/', (req, res) => {
-  res.send("hello")
-});
 
 if(process.env.NODE_ENV === 'production') {
   const path = require('path');
