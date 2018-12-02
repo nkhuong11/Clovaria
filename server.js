@@ -11,6 +11,7 @@ require('./models/User');
 //import routes
 authenticateRoutes = require('./routes/authenticate');
 uploadRoutes = require('./routes/uploadRoutes');
+getDataRoutes = require('./routes/getDataRoutes')
 //passport.use(new GoogleStrategy());
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true }).then(
   () => {console.log('Database is connected') },
@@ -111,6 +112,7 @@ app.use(
 //Routes
 app.use('/api/users', authenticateRoutes); //register and login
 app.use('/api/upload', uploadRoutes);
+app.use('/api/get', getDataRoutes);
 
 if(process.env.NODE_ENV === 'production') {
   const path = require('path');

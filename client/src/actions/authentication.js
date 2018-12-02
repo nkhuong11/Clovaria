@@ -14,7 +14,7 @@ export const registerUser = (user, history) => dispatch => {
             });
 }
 
-export const loginUser = (user) => dispatch => {
+export const loginUser =  (user) => dispatch => {
     axios.post('/api/users/login', user)
             .then(res => {
                 const { token } = res.data;
@@ -29,6 +29,7 @@ export const loginUser = (user) => dispatch => {
                     payload: err.response.data
                 });
             });
+
 }
 
 export const setCurrentUser = decoded => {

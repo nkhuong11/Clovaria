@@ -1,0 +1,16 @@
+.search-wrapper {
+    min-width: 125px;
+    width: 215px;
+    height: 28px;
+}
+
+.searchbar {
+    font-size: 16px;
+    border: solid 1px #dbdbdb;
+    border-radius: 3px;
+    color: #262626;
+    outline: 0;
+    padding: 3px 10px 3px 26px;
+    z-index: 2;
+}
+

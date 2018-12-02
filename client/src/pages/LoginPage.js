@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../actions/authentication';
+import { getAllUsers } from '../actions/getData';
 import classnames from 'classnames';
 
 class LoginPage extends Component {
@@ -29,7 +30,10 @@ class LoginPage extends Component {
             email: this.state.email,
             password: this.state.password,
         }
+
+        //!!!!!!!!!!!! AUthorize still stuck
         this.props.loginUser(user);
+        // this.props.getAllUsers();
     }
 
     componentDidMount() {
@@ -102,4 +106,4 @@ const mapStateToProps = (state) => ({
     user: state.user
 })
 
-export  default connect(mapStateToProps, { loginUser })(LoginPage)
+export default connect(mapStateToProps, { loginUser })(LoginPage)
