@@ -8,8 +8,8 @@ const keys = require('../config/keys');
 const User = require('../models/User');
 
 //get all user
-router.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
-//router.get('/users', (req, res) => {
+//router.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/users', (req, res) => {
     User.find({}).select('-password')
         .exec()
         .then(allUser => {
