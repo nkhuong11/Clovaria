@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
+import './css/HomePage.css'
 
 class HomePage extends Component {
     constructor(props) {
@@ -19,7 +20,7 @@ class HomePage extends Component {
         // console.log(this.props.auth.isAuthenticated)
         // console.log(this.props.auth.user)
         return (
-            <div>
+            <div className="my-homepage">
                 Home Page
             </div>
         );

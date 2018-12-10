@@ -38,32 +38,47 @@ import ProfilePage from './pages/ProfilePage';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-if(localStorage.jwtToken) {
-  setAuthToken(localStorage.jwtToken);
-  const decoded = jwt_decode(localStorage.jwtToken);
-  store.dispatch(setCurrentUser(decoded));
-  store.dispatch(getAllUsers());
+// if(localStorage.jwtToken) {
+//   setAuthToken(localStorage.jwtToken);
+//   const decoded = jwt_decode(localStorage.jwtToken);
+//   store.dispatch(setCurrentUser(decoded));
+//   store.dispatch(getAllUsers());
 
-  const currentTime = Date.now() / 1000;
-  if(decoded.exp < currentTime) {
-    store.dispatch(logoutUser());
-    window.location.href = '/login'
-  }
-}
+//   const currentTime = Date.now() / 1000;
+//   if(decoded.exp < currentTime) {
+//     store.dispatch(logoutUser());
+//     window.location.href = '/login'
+//   }
+// }
 
 class App extends Component {
+
+  componentDidMount (){
+    if(localStorage.jwtToken) {
+      setAuthToken(localStorage.jwtToken);
+      const decoded = jwt_decode(localStorage.jwtToken);
+      store.dispatch(setCurrentUser(decoded));
+      //store.dispatch(getAllUsers());
+    
+      const currentTime = Date.now() / 1000;
+      if(decoded.exp < currentTime) {
+        store.dispatch(logoutUser());
+        window.location.href = '/login'
+      }
+    }
+  }
   render() {
     return (
       <Provider store = { store }>
         <Router>
             <div>
               <Navbar />
-                <Route exact path="/" component={ HomePage } />
-                <div className="container">
-                  <Route exact path="/register" component={ RegisterPage } />
-                  <Route exact path="/login" component={ LoginPage } />
-                  <Route exact path="/profile" component={ ProfilePage } />
-                </div>
+              <div className="container">
+                <Route exact path="/register" component={ RegisterPage } />
+                <Route exact path="/login" component={ LoginPage } />
+                <Route exact path="/profile" component={ ProfilePage } />
+              </div>
+              <Route exact path="/" component={ HomePage } />
             </div>
           </Router>
         </Provider>

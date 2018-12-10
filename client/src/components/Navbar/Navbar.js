@@ -6,45 +6,22 @@ import { logoutUser } from '../../actions/authentication';
 import { getAllUsers } from '../../actions/getData';
 import { withRouter } from 'react-router-dom';
 
-
+import SearchBar from '../SearchBar/SearchBar';
 import '../css/Navbar.css';
-
 class Navbar extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            searchContent: ''
-        }
-        this.onSearchChange = this.onSearchChange.bind(this);
-        this.renderUserList = this.renderUserList.bind(this);
+        // this.state = {
+        //     searchContent: ''
+        // }
+        // this.onSearchChange = this.onSearchChange.bind(this);
+        // this.renderUserList = this.renderUserList.bind(this);
     }
 
-    findUser(name, userList) {
-        let result = userList.filter(user => {
-            return user.username.toLowerCase().includes(name.toLowerCase());
-        })
-        return result;
+    componentDidMount() {
+        this.props.getAllUsers();
     }
-
-    renderUserList(){
-        return (
-            <div>New User</div>
-        )
-    }
-
-    onSearchChange(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-        if(e.target.value !== '') {
-            const users = this.findUser(e.target.value, this.props.allUser);
-            console.log(users)
-            if(users) {
-                this.renderUserList() 
-            } 
-        }
-        
-    }
+    
 
     onLogout(e) {
         e.preventDefault();
@@ -53,14 +30,15 @@ class Navbar extends Component {
 
     render() {
         const {isAuthenticated, user} = this.props.auth;
+
+        const searchBar = (
+            <SearchBar allUser={this.props.allUser}/>
+        )
+
         const authLinks = (
-            <ul className="navbar-nav ml-auto">
-                <div className="search-wrapper">
-                    <input className="searchbar" type="text" autoCapitalize="none" placeholder="Search" value={this.state.searchContent} name="searchContent"
-                            onChange={this.onSearchChange}/>
-                </div>
-                <a href="#" className="nav-link" onClick={this.onLogout.bind(this)}>
-                    <img src={user.avatar} alt={user.name} title={user.name}
+            <ul className="navbar-right-item">
+                <a href="#" className="" onClick={this.onLogout.bind(this)}>
+                    <img src={user.avatar} alt={user.username} title={user.username}
                         className="rounded-circle"
                         style={{ width: '25px', marginRight: '5px'}} />
                             Logout
@@ -69,19 +47,22 @@ class Navbar extends Component {
         )
 
         const guestLinks = (
-            <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                    <Link className="nav-link" to="/register">Sign Up</Link>
-                </li>
-                <li className="nav-item">
-                    <Link className="nav-link" to="/login">Sign In</Link>
-                </li>
+            <ul className="navbar-right-item-wrapper">
+                <div>
+                    <Link className="navbar-right-item" to="/register">Sign Up</Link>
+                </div>
+                <div>
+                    <Link className="navbar-right-item" to="/login">Sign In</Link>
+                </div>
             </ul>
         )
         return(
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                <Link className="navbar-brand" to="/">Clovaria</Link>
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <nav className="my-custom-navbar">
+                <div className="navbar-logo">
+                    <Link to="/">Clovaria</Link>
+                </div>
+                {isAuthenticated ? searchBar : <div/>}
+                <div>
                     {isAuthenticated ? authLinks : guestLinks}
                 </div>
             </nav>
@@ -90,6 +71,7 @@ class Navbar extends Component {
 }
 Navbar.propTypes = {
     logoutUser: PropTypes.func.isRequired,
+    getAllUsers: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
 }
 
