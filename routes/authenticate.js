@@ -79,9 +79,11 @@ router.post('/login', (req, res) => {
                     .then(isMatch => {
                         if(isMatch) {
                             const payload = {
-                                id: user.id,
+                                _id: user.id,
                                 username: user.username,
-                                avatar: user.avatar
+                                email: user.email,
+                                avatar: user.avatar,
+                                friend_list: user.friend_list
                             }
                             jwt.sign(payload, keys.JWT_SECRET, {
                                 expiresIn: 3600
@@ -103,13 +105,21 @@ router.post('/login', (req, res) => {
         });
 });
 
-router.get('/me', passport.authenticate('jwt', { session: false }), (req, res) => {
-    if (res.user) 
-    return res.json({
-        id: req.user.id,
-        username: req.user.username,
-        email: req.user.email
-    });
-});
+// router.get('/me', passport.authenticate('jwt', { session: true }), (req, res) => {
+//     if (res.user) 
+//     return res.json({
+//         _id: req.user.id,
+//         username: req.user.username,
+//         email: req.user.email,
+//         avatar: req.user.avatar,
+//         friend_list: req.user.friend_list
+//     });
+// });
+
+// router.get('/me', passport.authenticate('jwt', { session: true }), (req, res) => {
+// router.get('/me', (req, res) => {    
+    
+// });
+
 
 module.exports = router;

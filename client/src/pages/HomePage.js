@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
+
+import FriendList from '../components/FriendList/FriendList';
 import './css/HomePage.css'
 
 class HomePage extends Component {
@@ -17,11 +18,13 @@ class HomePage extends Component {
     }
 
     render() {
-        // console.log(this.props.auth.isAuthenticated)
-        // console.log(this.props.auth.user)
+
         return (
             <div className="my-homepage">
-                Home Page
+                <div>
+                    Home Page
+                </div>
+                <FriendList/>
             </div>
         );
     }

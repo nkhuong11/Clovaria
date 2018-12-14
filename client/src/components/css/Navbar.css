@@ -39,3 +39,8 @@
 .navbar-right-item {
     margin-left: 15px;
 }
+
+.navbar-right-item a {
+    text-decoration: none !important;
+    color: inherit;
+}

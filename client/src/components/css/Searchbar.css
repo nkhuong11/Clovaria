@@ -91,4 +91,20 @@
     background: #389fff;
     border-color: #389fff;
 }
-  
+
+.friended-button {
+    color: #000;
+    border: solid 1px #e6e6e6;
+    background: #fafafa;
+    cursor: pointer;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 26px;
+    outline: 0;
+    overflow: hidden;
+    padding: 1px 6px;
+}
+

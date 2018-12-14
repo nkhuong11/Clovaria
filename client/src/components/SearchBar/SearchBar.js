@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import axios from 'axios';
+
 import '../css/Searchbar.css'
 
 class SearchBar extends Component {
@@ -11,12 +13,15 @@ class SearchBar extends Component {
         }
         this.onSearchChange = this.onSearchChange.bind(this);
         this.renderUserList = this.renderUserList.bind(this);
+        this.onFollowClicked = this.onFollowClicked.bind(this);
+        this.isFriended = this.isFriended.bind(this);
     }
 
     findUser(name, userList) {
         let result = userList.filter(user => {
             return user.username.toLowerCase().includes(name.toLowerCase());
         })
+        console.log(result);
         return result;
     }
 
@@ -45,6 +50,29 @@ class SearchBar extends Component {
         }
     }
 
+
+    onFollowClicked(user) {
+        const couple_id = {
+            user1_id: this.props.thisUser._id,
+            user2_id: user._id
+        }
+        axios.post('/api/users/addfriend', couple_id)
+            .then(res => {
+                console.log(res.data.message)
+                // if(res.data.success) {
+
+                // }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
+    }
+
+    isFriended(user){
+        return this.props.thisUser.friend_list.includes(user._id) ? true : false
+    }
+
     renderUserList(usersResults) {
         return usersResults.map((user, index) => 
             <a className="user-detail-wrapper" key={index} href="#">
@@ -56,8 +84,8 @@ class SearchBar extends Component {
                         {user.username}
                     </div>
                 </div>
-                <button className="addfriend-button" onClick={() => console.log('das')}>
-                    Follow
+                <button className={ this.isFriended(user) ? "friended-button" : "addfriend-button"} onClick={() => this.onFollowClicked(user)}>
+                    Friend
                 </button>
             </a>
         )
@@ -77,5 +105,7 @@ class SearchBar extends Component {
         )
     }
 }
+
+
 
 export default SearchBar;

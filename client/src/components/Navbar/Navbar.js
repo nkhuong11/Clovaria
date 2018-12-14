@@ -32,7 +32,7 @@ class Navbar extends Component {
         const {isAuthenticated, user} = this.props.auth;
 
         const searchBar = (
-            <SearchBar allUser={this.props.allUser}/>
+            <SearchBar allUser={this.props.allUser} thisUser={this.props.auth.user} />
         )
 
         const authLinks = (
@@ -62,7 +62,7 @@ class Navbar extends Component {
                     <Link to="/">Clovaria</Link>
                 </div>
                 {isAuthenticated ? searchBar : <div/>}
-                <div>
+                <div className="navbar-right-item">
                     {isAuthenticated ? authLinks : guestLinks}
                 </div>
             </nav>
@@ -80,4 +80,4 @@ const mapStateToProps = (state) => ({
     allUser: state.allData.all_users
 })
 
-export default connect(mapStateToProps, { logoutUser, getAllUsers })(withRouter(Navbar));
+export default connect(mapStateToProps, { logoutUser, getAllUsers})(withRouter(Navbar));

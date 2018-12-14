@@ -1,0 +1,11 @@
+.friend-list-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border: solid 1px #dbdbdb;
+    width: 250px;
+    max-width: 250px;
+    background: #eaeaea;
+    max-height: 80%;
+    max-height: 80%;
+}
