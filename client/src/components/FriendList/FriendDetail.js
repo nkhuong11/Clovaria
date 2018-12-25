@@ -6,12 +6,11 @@ class FriendDetail extends Component {
     render(){
         return (
             <div className="custom-wrapper"> 
-                {/* <img src={user.avatar} alt={user.username} title={user.username}
-                        className="rounded-circle"
-                        style={{ width: '30px', height: '30px', margin: '5px'}} />
+                <img src={this.props.user.avatar} alt={this.props.user.username} title={this.props.user.username}
+                        className="rounded-circle friend-avatar" />
                 <div className="user-name">
-                    {user.username}
-                </div> */}
+                    {this.props.user.username}
+                </div>
             </div>
 
         );

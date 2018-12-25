@@ -1,11 +1,32 @@
+li { 
+    list-style-type:none; 
+}
+
 .friend-list-container {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     border: solid 1px #dbdbdb;
-    width: 250px;
-    max-width: 250px;
-    background: #eaeaea;
-    max-height: 80%;
-    max-height: 80%;
+    padding: 8px;
+    width: 300px;
+    max-width: 300px;
+    background-color: #fff;
+    border: solid 1px #dbdbdb;
+    height: 55%;
+    max-height: 55%;
+    min-height: 0;
+    overflow: auto;
 }
+
+.friend-detail-container {
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.friend-avatar {
+    border: 0 solid #000;
+    width: 35px;
+    height: 35px;
+    margin: 5px
+}
+

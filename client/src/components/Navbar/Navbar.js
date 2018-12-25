@@ -2,26 +2,23 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { logoutUser } from '../../actions/authentication';
+import { logoutUser, setCurrentUser } from '../../actions/authentication';
 import { getAllUsers } from '../../actions/getData';
 import { withRouter } from 'react-router-dom';
+
+import jwt_decode from 'jwt-decode';
 
 import SearchBar from '../SearchBar/SearchBar';
 import '../css/Navbar.css';
 class Navbar extends Component {
     constructor(props) {
         super(props);
-        // this.state = {
-        //     searchContent: ''
-        // }
-        // this.onSearchChange = this.onSearchChange.bind(this);
-        // this.renderUserList = this.renderUserList.bind(this);
+        
     }
 
     componentDidMount() {
         this.props.getAllUsers();
     }
-    
 
     onLogout(e) {
         e.preventDefault();
@@ -32,7 +29,7 @@ class Navbar extends Component {
         const {isAuthenticated, user} = this.props.auth;
 
         const searchBar = (
-            <SearchBar allUser={this.props.allUser} thisUser={this.props.auth.user} />
+            <SearchBar allUser={this.props.allUser} thisUser={this.props.auth.user} setCurrentUser={this.props.setCurrentUser} />
         )
 
         const authLinks = (
@@ -58,7 +55,7 @@ class Navbar extends Component {
         )
         return(
             <nav className="my-custom-navbar">
-                <div className="navbar-logo">
+                <div className="navbar-logo" onClick={this.clovaria}>
                     <Link to="/">Clovaria</Link>
                 </div>
                 {isAuthenticated ? searchBar : <div/>}
@@ -80,4 +77,4 @@ const mapStateToProps = (state) => ({
     allUser: state.allData.all_users
 })
 
-export default connect(mapStateToProps, { logoutUser, getAllUsers})(withRouter(Navbar));
+export default connect(mapStateToProps, { logoutUser, getAllUsers, setCurrentUser})(withRouter(Navbar));

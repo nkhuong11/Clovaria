@@ -13,15 +13,15 @@ class HomePage extends Component {
     componentDidMount() {
         if(!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
-            console.log(this.props.auth)
+            console.log('HOME PAGE', this.props.auth)
         }
     }
 
     render() {
 
         return (
-            <div className="my-homepage">
-                <div>
+            <div className="homepage-container">
+                <div className="homepage">
                     Home Page
                 </div>
                 <FriendList/>

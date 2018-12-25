@@ -21,8 +21,6 @@ class App extends Component {
       setAuthToken(localStorage.jwtToken);
       const decoded = jwt_decode(localStorage.jwtToken);
       store.dispatch(setCurrentUser(decoded));
-      //store.dispatch(getAllUsers());
-    
       const currentTime = Date.now() / 1000;
       if(decoded.exp < currentTime) {
         store.dispatch(logoutUser());

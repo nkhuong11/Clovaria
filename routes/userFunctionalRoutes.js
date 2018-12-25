@@ -33,4 +33,37 @@ router.post('/addfriend', (req, res) => {
     });    
 });
 
+router.post('/unfriend', (req, res) => {
+    const {user1_id, user2_id} = req.body   
+    User.findOne({
+        _id: user1_id
+    }).exec().then(user => {
+        position = user.friend_list.indexOf(user2_id)
+        if(position == -1) {
+            return res.json({
+                success: false,
+                message: 'Not added friend yet'
+            });
+        }
+        else {
+            user.friend_list.splice(position, 1)
+            user.save();
+            User.findOne({
+                _id: user2_id
+            }).exec().then(user2 => {
+                position2 = user2.friend_list.indexOf(user1_id)
+                user2.friend_list.splice(position2, 1);
+                user2.save();
+                return res.status(200).json({
+                    success: true,
+                    message: 'Unfriended succeed'
+                })
+            })
+
+           
+        }
+    });    
+});
+
+
 module.exports = router;

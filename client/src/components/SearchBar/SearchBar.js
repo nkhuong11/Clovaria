@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import setAuthToken from '../../services/setAuthToken';
 
 import '../css/Searchbar.css'
 
@@ -58,15 +59,48 @@ class SearchBar extends Component {
         }
         axios.post('/api/users/addfriend', couple_id)
             .then(res => {
-                console.log(res.data.message)
-                // if(res.data.success) {
-
-                // }
+                const {success} = res.data;
+                if(success) {
+                    //fetch current user => Update after add friend.
+                    axios.post('/api/users/me', { email: this.props.thisUser.email})
+                        .then(res => {
+                            const { token } = res.data;
+                            localStorage.setItem('jwtToken', token);
+                            setAuthToken(token);
+                            const decoded = jwt_decode(token);
+                            console.log(decoded);
+                            this.props.setCurrentUser(decoded);
+                    })
+                }
             })
             .catch(err => {
                 console.log(err)
             })
+    }
 
+    onUnfollowClicked(user) {
+        const couple_id = {
+            user1_id: this.props.thisUser._id,
+            user2_id: user._id
+        }
+        axios.post('/api/users/unfriend', couple_id)
+            .then(res => {
+                console.log(res.data.message)
+                if(res.data.success) {
+                    //fetch current user => Update after add friend.
+                    axios.post('/api/users/me', { email: this.props.thisUser.email})
+                        .then(res => {
+                            const { token } = res.data;
+                            localStorage.setItem('jwtToken', token);
+                            setAuthToken(token);
+                            const decoded = jwt_decode(token);
+                            this.props.setCurrentUser(decoded);
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     isFriended(user){
@@ -74,21 +108,41 @@ class SearchBar extends Component {
     }
 
     renderUserList(usersResults) {
-        return usersResults.map((user, index) => 
-            <a className="user-detail-wrapper" key={index} href="#">
-                <div className="custom-wrapper"> 
-                    <img src={user.avatar} alt={user.username} title={user.username}
-                            className="rounded-circle"
-                            style={{ width: '30px', height: '30px', margin: '5px'}} />
-                    <div className="user-name">
-                        {user.username}
-                    </div>
-                </div>
-                <button className={ this.isFriended(user) ? "friended-button" : "addfriend-button"} onClick={() => this.onFollowClicked(user)}>
-                    Friend
-                </button>
-            </a>
-        )
+        return usersResults.map((user, index) => {
+            if (this.isFriended(user)) {
+                return (
+                    <a className="user-detail-wrapper" key={index} href="#">
+                        <div className="custom-wrapper"> 
+                            <img src={user.avatar} alt={user.username} title={user.username}
+                                    className="rounded-circle"
+                                    style={{ width: '30px', height: '30px', margin: '5px'}} />
+                            <div className="user-name">
+                                {user.username}
+                            </div>
+                        </div>
+                        <button className="friended-button" onClick={() => this.onUnfollowClicked(user)}>
+                            Friend
+                        </button>
+                    </a>
+                )
+            } else { 
+                return (
+                    <a className="user-detail-wrapper" key={index} href="#">
+                        <div className="custom-wrapper"> 
+                            <img src={user.avatar} alt={user.username} title={user.username}
+                                    className="rounded-circle"
+                                    style={{ width: '30px', height: '30px', margin: '5px'}} />
+                            <div className="user-name">
+                                {user.username}
+                            </div>
+                        </div>
+                        <button className="addfriend-button" onClick={() => this.onFollowClicked(user)}>
+                            Follow
+                        </button>
+                    </a>
+                )
+            }
+        })
     }
 
     render() {

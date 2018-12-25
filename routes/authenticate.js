@@ -105,21 +105,35 @@ router.post('/login', (req, res) => {
         });
 });
 
-// router.get('/me', passport.authenticate('jwt', { session: true }), (req, res) => {
-//     if (res.user) 
-//     return res.json({
-//         _id: req.user.id,
-//         username: req.user.username,
-//         email: req.user.email,
-//         avatar: req.user.avatar,
-//         friend_list: req.user.friend_list
-//     });
-// });
-
-// router.get('/me', passport.authenticate('jwt', { session: true }), (req, res) => {
-// router.get('/me', (req, res) => {    
-    
-// });
-
+router.post('/me', (req, res) => {
+    const email = req.body.email;
+    User.findOne({email})
+        .exec()
+        .then(user => {
+            if(!user) {
+                errors.email = 'User not found'
+                return res.status(404).json(errors);
+            }   
+                        
+            const payload = {
+                _id: user.id,
+                username: user.username,
+                email: user.email,
+                avatar: user.avatar,
+                friend_list: user.friend_list
+            }
+            jwt.sign(payload, keys.JWT_SECRET, {
+                expiresIn: 3600
+            }, (err, token) => {
+                if(err) console.error('There is some error in token', err);
+                else {
+                    res.json({
+                        success: true,
+                        token: `Bearer ${token}`
+                    });
+                }
+            });
+        });
+});
 
 module.exports = router;
