@@ -41,5 +41,5 @@ li {
     justify-content: flex-end;
     position: fixed;
     overflow: hidden;
-    border: red 1px solid;
+    /* border: red 1px solid; */
 }
