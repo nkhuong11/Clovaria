@@ -19,11 +19,12 @@ uploadRoutes = require('./routes/uploadRoutes');
 getDataRoutes = require('./routes/getDataRoutes');
 userFunctionalRoutes = require('./routes/userFunctionalRoutes');
 
+const PORT = process.env.PORT || 5000;
 
 class Server {
 
   constructor() {
-    this.port = process.env.PORT || 5000;
+    this.port = PORT;
     this.host = 'localhost';
 
     this.app = express();
@@ -57,7 +58,6 @@ class Server {
   }
 
   appExecute(){
-    console.log(this.port);
     this.appConfig();
     this.appConnectDB()
     this.includeRoutes();
