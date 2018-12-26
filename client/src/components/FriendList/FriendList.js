@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+
+import ChatBox from '../ChatBox/ChatBox'
 import FriendDetail from './FriendDetail';
 import '../css/FriendList.css';
 
@@ -9,28 +10,23 @@ class FriendList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            friendList: []
+            friendList: [],
+            listChatBox: [],
         }
         this.renderFriendList = this.renderFriendList.bind(this);
         this.getFriendListData = this.getFriendListData.bind(this);
+        this.openChatBox = this.openChatBox.bind(this);
+        this.closeChatBox = this.closeChatBox.bind(this);
+        this.renderChatBox = this.renderChatBox.bind(this);
     }
     
     componentDidMount() {
         let friendList = this.getFriendListData(this.props.currentUser.friend_list, this.props.allUser);
         this.setState({friendList})
-        console.log('FRIENDLIST STATE: ', this.state.friendList);
+        
     }
 
-    renderFriendList(friends) {
-        return friends.map((each, index) => {
-            return (
-                <li className="friend-detail-container">
-                    <FriendDetail key={index} user={each}/>
-                </li>
-                
-            )
-        })
-    }
+    
 
     getFriendListData(friend_list, all_user){
         const friends = all_user.filter(user => {
@@ -45,11 +41,50 @@ class FriendList extends Component {
         return friends;
     }
 
+    openChatBox(user){
+        if(!this.state.listChatBox.includes(user)) {
+            this.setState({
+                listChatBox: [...this.state.listChatBox, user]
+            })
+        }
+    }
+
+    closeChatBox(user) {
+        let newListChatBox = [...this.state.listChatBox];
+        var index = newListChatBox.indexOf(user)
+        if (index !== -1) {
+            newListChatBox.splice(index, 1);
+          this.setState({listChatBox: newListChatBox});
+        }
+    }
+
+    renderFriendList(friends) {
+        return friends.map((each, index) => {
+            return (
+                <li className="friend-detail-container">
+                    <FriendDetail key={index} user={each} onOpenChatBox={this.openChatBox}/>
+                </li>
+                
+            )
+        })
+    }
+
+    renderChatBox() {
+        return this.state.listChatBox.map(user => {
+            return (
+                <ChatBox key={user} user={user} onCloseChatBox={this.closeChatBox}/>
+            );
+        })
+    }
+
 
     render(){
         return (
             <div className="friend-list-container">
                 {this.renderFriendList(this.state.friendList)}
+                <div className='list-chatbox-container'>
+                    {this.renderChatBox()}
+                </div>
             </div>
         );
     }

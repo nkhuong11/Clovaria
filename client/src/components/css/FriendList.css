@@ -30,3 +30,16 @@ li {
     margin: 5px
 }
 
+
+.list-chatbox-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    bottom: 0;
+    right: 0;
+    align-items: center;
+    justify-content: flex-end;
+    position: fixed;
+    overflow: hidden;
+    border: red 1px solid;
+}
