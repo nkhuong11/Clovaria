@@ -19,12 +19,11 @@ uploadRoutes = require('./routes/uploadRoutes');
 getDataRoutes = require('./routes/getDataRoutes');
 userFunctionalRoutes = require('./routes/userFunctionalRoutes');
 
-const PORT = process.env.PORT || 5000;
 
 class Server {
 
-  constructor() {
-    this.port = PORT;
+  constructor(env) {
+    this.port = env.PORT || 5000;
     this.host = 'localhost';
 
     this.app = express();
@@ -62,7 +61,7 @@ class Server {
     this.appConnectDB()
     this.includeRoutes();
 
-    if(process.env.NODE_ENV === 'production') {
+    if(env.NODE_ENV === 'production') {
       console.log('PRODUCTION')
       const path = require('path');
       //Express will server up production assets like main.js, main.css file
@@ -80,7 +79,7 @@ class Server {
   }
 }
 
-const app = new Server();
+const app = new Server(process.env);
 app.appExecute();
 
 
