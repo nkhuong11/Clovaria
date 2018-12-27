@@ -6,5 +6,5 @@ import getDataReducer from './getDataReducer';
 export default combineReducers({
     errors: errorReducer,
     auth: authReducer,
-    allData: getDataReducer, 
+    data: getDataReducer, 
 });

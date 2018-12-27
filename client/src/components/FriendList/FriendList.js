@@ -100,7 +100,7 @@ class FriendList extends Component {
 
 const mapStateToProps = (state) => ({
     currentUser: state.auth.user,
-    allUser: state.allData.all_users
+    allUser: state.data.all_users
 })
 
 export default connect(mapStateToProps)(FriendList);

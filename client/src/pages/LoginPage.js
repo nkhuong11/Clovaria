@@ -7,8 +7,8 @@ import classnames from 'classnames';
 
 class LoginPage extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             email: '',
             password: '',
@@ -30,14 +30,12 @@ class LoginPage extends Component {
             email: this.state.email,
             password: this.state.password,
         }
-
-        //!!!!!!!!!!!! AUthorize still stuck
-        this.props.loginUser(user);
-        // this.props.getAllUsers();
     }
 
     componentDidMount() {
+        console.log('componentDidMount auth', this.props.auth);
         if(this.props.auth.isAuthenticated) {
+            this.props.socket.emit('user login', this.props.auth.user); //emit login signal
             this.props.history.push('/');
         }
     }
@@ -45,6 +43,7 @@ class LoginPage extends Component {
     componentWillReceiveProps(nextProps) {
         if(nextProps.auth.isAuthenticated) {
             this.props.history.push('/profile')
+            this.props.socket.emit('user login', this.props.auth.user);
         }
         if(nextProps.errors) {
             this.setState({
@@ -103,7 +102,6 @@ LoginPage.propTypes = {
 const mapStateToProps = (state) => ({
     auth: state.auth,
     errors: state.errors,
-    user: state.user
 })
 
 export default connect(mapStateToProps, { loginUser })(LoginPage)

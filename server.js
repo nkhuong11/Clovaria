@@ -96,7 +96,6 @@ const app = express();
 const server = http.createServer(app); 
 const socket =  socketio(server);
 
-
 //  APP CONFIG
 
 app.use(cors());

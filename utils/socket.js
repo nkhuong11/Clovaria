@@ -1,24 +1,32 @@
 class Socket {
     constructor(socket) {
         this.io = socket;
-        this.onlineIdList = {};
+        this.connectedUsers = {};
     }
 
     socketEvents() {
-        console.log('Hello')
-
         this.io.on('connection', (socket) => {
-            socket.on('new user', function(id, data) {
-                if (id in this.onlineIdList){
-                    data(false);
-                } else {
-                    data(true);
-                    //socket.nickname = name;
-                    //onlineIdList[socket.nickname] = socket;
-                    console.log('NEW USER LOGIN');
-                    //updateNickNames();
-                }    
+            console.log("New client connected")
+            socket.on('user login', function(data) {
+                // if (name in this.connectedUsers){
+                //     data(false);
+                // } else {
+                //     data(true);
+                //     socket.nickname = name;
+                //     connectedUsers[socket.nickname] = socket;
+                //     console.log('NEW USER LOGIN');
+                //     updateNickNames();
+                // }    
+                console.log('LOG IN', data);
             });
+
+            socket.on('disconnect', function(data){
+                console.log("Client left!")
+            });
+
+            function updateNickNames(){
+                io.sockets.emit('usernames', Object.keys(users));
+            }
             
             // ```Get the user's chat list```
 

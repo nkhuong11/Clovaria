@@ -74,7 +74,7 @@ Navbar.propTypes = {
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
-    allUser: state.allData.all_users
+    allUser: state.data.all_users
 })
 
 export default connect(mapStateToProps, { logoutUser, getAllUsers, setCurrentUser})(withRouter(Navbar));

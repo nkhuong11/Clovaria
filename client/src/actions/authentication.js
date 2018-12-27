@@ -29,7 +29,6 @@ export const loginUser =  (user) => dispatch => {
                     payload: err.response.data
                 });
             });
-
 }
 
 export const setCurrentUser = decoded => {
