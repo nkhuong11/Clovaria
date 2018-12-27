@@ -105,6 +105,8 @@ app.use(bodyParser.json());
 app.use(passport.initialize())
 require('./services/passport')(passport);
 
+mySocketEvents = new socketEvents(socket).socketConfig();
+
 //  ROUTES
 
 app.use('/api/users', authenticateRoutes, userFunctionalRoutes); //register, login and other functional

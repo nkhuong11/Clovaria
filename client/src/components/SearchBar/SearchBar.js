@@ -10,13 +10,14 @@ class SearchBar extends Component {
         super(props);
         this.state = {
             searchContent: '',
-            usersResults: []
+            usersResults: [],
         }
         this.onSearchChange = this.onSearchChange.bind(this);
         this.renderUserList = this.renderUserList.bind(this);
         this.onFollowClicked = this.onFollowClicked.bind(this);
         this.isFriended = this.isFriended.bind(this);
     }
+
 
     findUser(name, userList) {
         let result = userList.filter(user => {
@@ -151,7 +152,7 @@ class SearchBar extends Component {
         return (
             <div className="search-wrapper">
                 <input className="searchbar" type="text" autoCapitalize="none" placeholder="Search" value={this.state.searchContent} name="searchContent"
-                        onChange={this.onSearchChange}/> 
+                        onChange={this.onSearchChange} ref={node => this.node = node}/> 
                 <div className="user-result-list-wrapper">
                     {(this.state.usersResults.length != 0) ? <div className="user-result-list">{listUser}</div> : <div></div>}    
                 </div>   

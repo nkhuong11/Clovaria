@@ -32,7 +32,7 @@ class ChatBox extends Component {
                     </div>
                 </div>
                 <div className="chatbox-content">
-                       content here
+                    <div class="msg_push"></div>
                 </div>
                 <div className="chatbox-bottom">
                        <input className="chat-input" type="text" 

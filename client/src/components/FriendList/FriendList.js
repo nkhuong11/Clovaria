@@ -26,6 +26,14 @@ class FriendList extends Component {
         
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(this.props.currentUser !== nextProps.currentUser) 
+        {
+            let friendList = this.getFriendListData(nextProps.currentUser.friend_list, nextProps.allUser);
+            this.setState({friendList})
+        }
+    } 
+
     
 
     getFriendListData(friend_list, all_user){
@@ -37,7 +45,6 @@ class FriendList extends Component {
             }
             return false;
         })
-        console.log('FRIENDS', friends);
         return friends;
     }
 
