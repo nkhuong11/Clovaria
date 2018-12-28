@@ -45,6 +45,7 @@
 }
 
 .chatbox-content {
+    display: flex;
     flex-direction: column;
     height: 100%;
     font-size: 16px;
@@ -62,20 +63,37 @@ input {
     padding: 0 5px;
 }
 
-.message-container{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.my-message-container{
+    margin-left: auto;
+    padding: 2px;
+    max-width: 65%;
+    overflow-wrap: break-word;
+    line-height: 1;
 }
 
-.friend-avatar {
+.friend-message-container {
+    align-items: center;
+    margin-right: auto;
+    max-width: 65%;
+    padding: 2px;
+    overflow-wrap: break-word;
+    line-height: 1;
+}
+
+.message-continue {
+    margin-left: 35px;
+}
+
+.user-avatar {
     border: 0 solid #000;
     width: 30px;
     height: 30px;
+    margin-right: 5px;
 }
 
 .message {
     background: #aeaeae;
-    padding: 0 5px;
+    padding: 2px 7px 5px 7px;
     border-radius: 4px !important;
+    height: 100%;
 }

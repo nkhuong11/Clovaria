@@ -16,14 +16,16 @@ class ChatBox extends Component {
         this.updateMessage = this.updateMessage.bind(this);
         this.renderMessages = this.renderMessages.bind(this);
 
-        this.props.socket.on('receive message', (data) => {
-            this.updateMessage(data)
+        this.props.socket.on('receive message', (message) => {
+            this.updateMessage(message)
         })
         
     }
 
-    updateMessage(data) {
-        console.log(data)
+    updateMessage(message) {
+        this.setState(prevState  => ({
+            messageHistory: [...prevState.messageHistory, message]
+        }));
     }
 
     onEnterPress(e) {
@@ -31,10 +33,13 @@ class ChatBox extends Component {
             this.props.socket.emit('send message', {toID: this.props.user._id, message: this.state.message});
             this.setState(prevState  => ({
                     message: '',
-                    messageHistory: [...prevState.messageHistory, prevState.message]
+                    messageHistory: [...prevState.messageHistory, 
+                        {
+                            message: prevState.message,
+                            id: this.props.currentUser._id,
+                        }]
                 }));
         }
-        
     }
 
     updateInputValue(e) {
@@ -48,16 +53,38 @@ class ChatBox extends Component {
     }
 
     renderMessages(){
-        return this.state.messageHistory.map((mess, index) => {
-            return (
-                <div key={index} className="message-container">
-                    <img src={this.props.currentUser.avatar} alt={this.props.currentUser.username} title={this.props.currentUser.username}
-                        className="rounded-circle friend-avatar"/>
-                    <div className="message">
-                        {mess}
+    
+        return this.state.messageHistory.map((currentMessage, index) => {
+            if (currentMessage.id === this.props.currentUser._id) {
+                return (
+                    <div key={index} className="my-message-container">
+                        <div className="message">
+                            {currentMessage.message}
+                        </div>
                     </div>
-                </div>
-            );
+                );
+            } else {
+                if(this.state.messageHistory[index-1] !== undefined && this.state.messageHistory[index-1].id === currentMessage.id) {
+                    return (
+                        <div key={index} className="friend-message-container message-continue">
+                            <div className="message">
+                                {currentMessage.message}
+                            </div>
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div key={index} className="friend-message-container">
+                            <img src={this.props.currentUser.avatar} alt={this.props.currentUser.username} title={this.props.currentUser.username}
+                                className="rounded-circle user-avatar"/>
+                            <div className="message">
+                                {currentMessage.message}
+                            </div>
+                        </div>
+                    );
+                }
+            }
+            
         })
     }
 

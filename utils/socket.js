@@ -40,8 +40,7 @@ class Socket {
                 //userID: id of friend that we send message to
                 if (data.toID in connectedUsers){
                     //if this user is online
-                    //connectedUsers[userID].emit('open chatbox from server', {id: socket.id}, `Hello ${userID}, I'm ${socket.id}`);
-                    connectedUsers[data.toID].emit('receive message', {fromID: socket.id, message: data.message});
+                    connectedUsers[data.toID].emit('receive message', {id: socket.id, message: data.message});
                 }
                
             });
