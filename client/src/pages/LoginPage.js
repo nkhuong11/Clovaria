@@ -30,21 +30,25 @@ class LoginPage extends Component {
             email: this.state.email,
             password: this.state.password,
         }
+
+        this.props.loginUser(user);
     }
 
     componentDidMount() {
-        console.log('componentDidMount auth', this.props.auth);
+        //console.log('LoginPage Did Mount', this.props.auth.user._id);
         if(this.props.auth.isAuthenticated) {
-            this.props.socket.emit('user login', this.props.auth.user); //emit login signal
+            this.props.socket.emit('user login', this.props.auth.user._id); //emit login signal
             this.props.history.push('/');
         }
     }
 
     componentWillReceiveProps(nextProps) {
+        //console.log('componentWillReceiveProps', nextProps.auth.user._id);
         if(nextProps.auth.isAuthenticated) {
+            this.props.socket.emit('user login', nextProps.auth.user._id);
             this.props.history.push('/profile')
-            this.props.socket.emit('user login', this.props.auth.user);
         }
+
         if(nextProps.errors) {
             this.setState({
                 errors: nextProps.errors

@@ -23,6 +23,16 @@ class Navbar extends Component {
     onLogout(e) {
         e.preventDefault();
         this.props.logoutUser(this.props.history);
+        
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // console.log('Navbar will receive props');
+        // console.log('componentWillReceiveProps nextProps', nextProps.auth);
+        // console.log('componentWillReceiveProps thisProps', this.props.auth);
+        if(this.props.auth.isAuthenticated && !nextProps.auth.isAuthenticated) {
+            this.props.socket.emit('user logout', this.props.auth.user._id);
+        } 
     }
 
     render() {

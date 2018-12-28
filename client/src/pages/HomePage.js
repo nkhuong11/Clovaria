@@ -15,6 +15,7 @@ class HomePage extends Component {
             this.props.history.push('/login');
             console.log('HOME PAGE', this.props.auth)
         }
+        console.log('Socket: ', this.props.socket);
     }
 
     render() {
@@ -24,7 +25,7 @@ class HomePage extends Component {
                 <div className="homepage">
                     Home Page
                 </div>
-                <FriendList/>
+                <FriendList socket={this.props.socket}/>
             </div>
         );
     }

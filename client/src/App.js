@@ -18,7 +18,15 @@ import ChatPage from './pages/ChatPage/ChatPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-const socket = socketIOClient();
+const socket = socketIOClient('http://localhost:5000');
+//const socket = socketIOClient();
+socket.on('active users', (data) => {
+  console.log('active users', data);
+})
+
+socket.on('open chatbox from server', (id) => {
+  console.log('ID', id);
+})
 
 class App extends Component {
   constructor() {
@@ -44,14 +52,13 @@ class App extends Component {
       <Provider store = { store }>
         <Router>
           <div className="root-container">
-            <Navbar />
+            <Navbar socket={socket}/>
             <div className="body-container">
                 <Route exact path="/login" render={props => (<LoginPage {...props} socket={socket}/>)} />
                 <Route exact path="/register" render={props => (<RegisterPage {...props} socket={socket}/>)} />
                 <Route exact path="/profile" render={props => (<ProfilePage {...props} socket={socket}/>)} />
                 <Route exact path="/" render={props => (<HomePage {...props} socket={socket}/>)} />
             </div>
-            
           </div>
         </Router>
       </Provider>

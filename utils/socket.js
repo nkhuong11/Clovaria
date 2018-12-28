@@ -1,32 +1,63 @@
+connectedUsers = {};
+
 class Socket {
     constructor(socket) {
         this.io = socket;
-        this.connectedUsers = {};
+        this.socketEvents = this.socketEvents.bind(this);
+        this.updateConnectedUsers = this.updateConnectedUsers.bind(this);
+    }
+
+    updateConnectedUsers(){
+        // sending to all connected clients
+        this.io.emit('active users', Object.keys(connectedUsers));
     }
 
     socketEvents() {
+
+
         this.io.on('connection', (socket) => {
-            console.log("New client connected")
-            socket.on('user login', function(data) {
-                // if (name in this.connectedUsers){
-                //     data(false);
-                // } else {
-                //     data(true);
-                //     socket.nickname = name;
-                //     connectedUsers[socket.nickname] = socket;
-                //     console.log('NEW USER LOGIN');
-                //     updateNickNames();
-                // }    
-                console.log('LOG IN', data);
+            console.log("New access")
+            socket.on('user login', (userID) => {
+                if (userID in connectedUsers){
+                    console.log(`${userID} is already in connectedUsers`)
+                } else {
+                    console.log(`Add ${userID} to connectedUsers`)
+                    socket.id = userID;
+                    connectedUsers[socket.id] = socket;
+                    this.updateConnectedUsers();
+                }    
+                console.log('connectedUsers: ', Object.keys(connectedUsers));
             });
 
-            socket.on('disconnect', function(data){
-                console.log("Client left!")
+            socket.on('user logout', (userID) => {
+                console.log('User logout');
+                delete connectedUsers[userID];
+                this.updateConnectedUsers();
+                console.log('connectedUsers: ', Object.keys(connectedUsers));
             });
 
-            function updateNickNames(){
-                io.sockets.emit('usernames', Object.keys(users));
-            }
+            socket.on('open chatbox from client', (userID) => {
+                //userID: id of friend that we want to chat
+                console.log('on: open chatbox');
+                console.log('Chat box ID: ', userID);
+                console.log('Current socket id', socket.id)
+                if (userID in connectedUsers){
+                    //This user is online
+                    connectedUsers[userID].emit('open chatbox from server', {id: socket.id});
+                }
+               
+            });
+
+            socket.on('disconnect', (data) => {
+                console.log("Client left!");
+                if (!socket.id) 
+                    return;
+                delete connectedUsers[socket.id];
+                this.updateConnectedUsers();
+                console.log('connectedUsers: ', Object.keys(connectedUsers));
+            });
+
+           
             
             // ```Get the user's chat list```
 

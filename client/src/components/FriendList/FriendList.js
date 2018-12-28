@@ -23,7 +23,6 @@ class FriendList extends Component {
     componentDidMount() {
         let friendList = this.getFriendListData(this.props.currentUser.friend_list, this.props.allUser);
         this.setState({friendList})
-        
     }
 
     componentWillReceiveProps(nextProps) {
@@ -53,6 +52,7 @@ class FriendList extends Component {
             this.setState({
                 listChatBox: [...this.state.listChatBox, user]
             })
+            this.props.socket.emit('open chatbox from client', user._id)
         }
     }
 
@@ -68,8 +68,8 @@ class FriendList extends Component {
     renderFriendList(friends) {
         return friends.map((each, index) => {
             return (
-                <li className="friend-detail-container">
-                    <FriendDetail key={index} user={each} onOpenChatBox={this.openChatBox}/>
+                <li className="friend-detail-container" key={index}>
+                    <FriendDetail user={each} onOpenChatBox={this.openChatBox.bind(this)}/>
                 </li>
                 
             )
