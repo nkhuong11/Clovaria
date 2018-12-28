@@ -45,13 +45,11 @@
 }
 
 .chatbox-content {
-    display: flex;
     flex-direction: column;
     height: 100%;
     font-size: 16px;
     padding: 5px;
     overflow:auto;
-	overflow-x: hidden;
 }
 
 .chat-input {
@@ -62,4 +60,22 @@
 input {
     outline:none;
     padding: 0 5px;
+}
+
+.message-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.friend-avatar {
+    border: 0 solid #000;
+    width: 30px;
+    height: 30px;
+}
+
+.message {
+    background: #aeaeae;
+    padding: 0 5px;
+    border-radius: 4px !important;
 }

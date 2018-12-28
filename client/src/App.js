@@ -25,8 +25,10 @@ socket.on('active users', (data) => {
 })
 
 socket.on('open chatbox from server', (id) => {
-  console.log('ID', id);
+  console.log('message: ' + id);
 })
+
+
 
 class App extends Component {
   constructor() {

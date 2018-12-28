@@ -69,7 +69,7 @@ class FriendList extends Component {
         return friends.map((each, index) => {
             return (
                 <li className="friend-detail-container" key={index}>
-                    <FriendDetail user={each} onOpenChatBox={this.openChatBox.bind(this)}/>
+                    <FriendDetail user={each} onOpenChatBox={this.openChatBox.bind(this)} />
                 </li>
                 
             )
@@ -79,7 +79,7 @@ class FriendList extends Component {
     renderChatBox() {
         return this.state.listChatBox.map(user => {
             return (
-                <ChatBox key={user} user={user} onCloseChatBox={this.closeChatBox}/>
+                <ChatBox key={user} user={user} onCloseChatBox={this.closeChatBox} socket={this.props.socket}/>
             );
         })
     }

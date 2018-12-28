@@ -36,14 +36,25 @@ class Socket {
                 console.log('connectedUsers: ', Object.keys(connectedUsers));
             });
 
+            socket.on('send message', (data) => {
+                //userID: id of friend that we send message to
+                if (data.toID in connectedUsers){
+                    //if this user is online
+                    //connectedUsers[userID].emit('open chatbox from server', {id: socket.id}, `Hello ${userID}, I'm ${socket.id}`);
+                    connectedUsers[data.toID].emit('receive message', {fromID: socket.id, message: data.message});
+                }
+               
+            });
+
             socket.on('open chatbox from client', (userID) => {
                 //userID: id of friend that we want to chat
                 console.log('on: open chatbox');
                 console.log('Chat box ID: ', userID);
                 console.log('Current socket id', socket.id)
                 if (userID in connectedUsers){
-                    //This user is online
-                    connectedUsers[userID].emit('open chatbox from server', {id: socket.id});
+                    //if this user is online
+                    //connectedUsers[userID].emit('open chatbox from server', {id: socket.id}, `Hello ${userID}, I'm ${socket.id}`);
+                    connectedUsers[userID].emit('open chatbox from server', `User ${socket.id} want to chat with us`);
                 }
                
             });
