@@ -44,20 +44,7 @@ class Socket {
                 }
                
             });
-
-            socket.on('open chatbox from client', (userID) => {
-                //userID: id of friend that we want to chat
-                console.log('on: open chatbox');
-                console.log('Chat box ID: ', userID);
-                console.log('Current socket id', socket.id)
-                if (userID in connectedUsers){
-                    //if this user is online
-                    //connectedUsers[userID].emit('open chatbox from server', {id: socket.id}, `Hello ${userID}, I'm ${socket.id}`);
-                    connectedUsers[userID].emit('open chatbox from server', `User ${socket.id} want to chat with us`);
-                }
-               
-            });
-
+            
             socket.on('disconnect', (data) => {
                 console.log("Client left!");
                 if (!socket.id) 

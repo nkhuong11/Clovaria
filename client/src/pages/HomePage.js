@@ -10,11 +10,11 @@ class HomePage extends Component {
         
     }
     
-    componentDidMount() {
+    componentWillMount() {
         if(!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
-            console.log('HOME PAGE', this.props.auth)
         }
+        console.log('HOME PAGE')
     }
 
     render() {

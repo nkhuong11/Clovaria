@@ -18,25 +18,25 @@ import ChatPage from './pages/ChatPage/ChatPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-const socket = socketIOClient('http://localhost:5000');
-//const socket = socketIOClient();
-socket.on('active users', (data) => {
-  console.log('active users', data);
-})
-
-socket.on('open chatbox from server', (id) => {
-  console.log('message: ' + id);
-})
-
 
 
 class App extends Component {
   constructor() {
     super();
+    this.checkjwtToken();
+
+    this.socket = socketIOClient('http://localhost:5000');
+    this.socket.on('active users', (data) => {
+      console.log('active users', data);
+    })
+    
+    this.socket.on('open chatbox from server', (id) => {
+      console.log('message: ' + id);
+    })
+
   }
 
-  componentDidMount (){
-
+  checkjwtToken(){
     if(localStorage.jwtToken) {
       setAuthToken(localStorage.jwtToken);
       const decoded = jwt_decode(localStorage.jwtToken);
@@ -54,12 +54,12 @@ class App extends Component {
       <Provider store = { store }>
         <Router>
           <div className="root-container">
-            <Navbar socket={socket}/>
+            <Navbar socket={this.socket}/>
             <div className="body-container">
-                <Route exact path="/login" render={props => (<LoginPage {...props} socket={socket}/>)} />
-                <Route exact path="/register" render={props => (<RegisterPage {...props} socket={socket}/>)} />
-                <Route exact path="/profile" render={props => (<ProfilePage {...props} socket={socket}/>)} />
-                <Route exact path="/" render={props => (<HomePage {...props} socket={socket}/>)} />
+                <Route exact path="/login" render={props => (<LoginPage {...props} socket={this.socket}/>)} />
+                <Route exact path="/register" render={props => (<RegisterPage {...props} socket={this.socket}/>)} />
+                <Route exact path="/profile" render={props => (<ProfilePage {...props} socket={this.socket}/>)} />
+                <Route exact path="/" render={props => (<HomePage {...props} socket={this.socket}/>)} />
             </div>
           </div>
         </Router>

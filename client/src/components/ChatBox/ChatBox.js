@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import InputField from './InputField'
+
 import '../css/ChatBox.css'
 
 class ChatBox extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            message : '',
-            messageHistory: [],
-        };
+        if (this.props.user.incommingMessage !== null){
+            this.state = {
+                messageHistory: [this.props.user.incommingMessage],
+            };
+        } else {
+            this.state = {
+                messageHistory: [],
+            };
+        }
+        
         this.onEnterPress = this.onEnterPress.bind(this);
         this.closeChatBox = this.closeChatBox.bind(this);
         this.updateInputValue = this.updateInputValue.bind(this);
@@ -21,6 +29,7 @@ class ChatBox extends Component {
         })
         
     }
+    
 
     updateMessage(message) {
         this.setState(prevState  => ({
@@ -28,32 +37,29 @@ class ChatBox extends Component {
         }));
     }
 
-    onEnterPress(e) {
-        if (e.key === 'Enter') {
-            this.props.socket.emit('send message', {toID: this.props.user._id, message: this.state.message});
-            this.setState(prevState  => ({
-                    message: '',
-                    messageHistory: [...prevState.messageHistory, 
-                        {
-                            message: prevState.message,
-                            id: this.props.currentUser._id,
-                        }]
-                }));
-        }
+    onEnterPress(mess) {
+        this.props.socket.emit('send message', {toID: this.props.user._id, message: mess});
+        this.setState(prevState  => ({
+                messageHistory: [...prevState.messageHistory, 
+                    {
+                        message: mess,
+                        id: this.props.currentUser._id,
+                    }]
+            }));
+        
     }
 
     updateInputValue(e) {
         this.setState({
           message: e.target.value
         });
-      }
+    }
 
     closeChatBox(user) {
         this.props.onCloseChatBox(user);
     }
 
     renderMessages(){
-    
         return this.state.messageHistory.map((currentMessage, index) => {
             if (currentMessage.id === this.props.currentUser._id) {
                 return (
@@ -75,7 +81,7 @@ class ChatBox extends Component {
                 } else {
                     return (
                         <div key={index} className="friend-message-container">
-                            <img src={this.props.currentUser.avatar} alt={this.props.currentUser.username} title={this.props.currentUser.username}
+                            <img src={this.props.user.avatar} alt={this.props.user.username} title={this.props.user.username}
                                 className="rounded-circle user-avatar"/>
                             <div className="message">
                                 {currentMessage.message}
@@ -103,11 +109,7 @@ class ChatBox extends Component {
                     {this.renderMessages()}
                 </div>
                 <div className="chatbox-bottom">
-                       <input className="chat-input" type="text" 
-                            placeholder="Type..."  
-                            onKeyPress={(e) => this.onEnterPress(e)}
-                            value={this.state.message}
-                            onChange={this.updateInputValue}/>
+                        <InputField onEnterPress={this.onEnterPress}/>
                 </div>
             </div>
         );

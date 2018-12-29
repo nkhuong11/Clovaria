@@ -18,6 +18,10 @@ class FriendList extends Component {
         this.openChatBox = this.openChatBox.bind(this);
         this.closeChatBox = this.closeChatBox.bind(this);
         this.renderChatBox = this.renderChatBox.bind(this);
+        this.autoOpenChatBox = this.autoOpenChatBox.bind(this);
+        this.props.socket.on('receive message', (data) => {
+            this.autoOpenChatBox(data.id, data.message);
+        })
     }
     
     componentDidMount() {
@@ -33,8 +37,6 @@ class FriendList extends Component {
         }
     } 
 
-    
-
     getFriendListData(friend_list, all_user){
         const friends = all_user.filter(user => {
             for (let i = 0; i < friend_list.length; i++) {
@@ -47,12 +49,30 @@ class FriendList extends Component {
         return friends;
     }
 
+    autoOpenChatBox(userID, message) {
+        for(let i = 0; i < this.state.friendList.length; i++ ) {
+            if (userID == this.state.friendList[i]._id) {
+                let user = this.state.friendList[i]
+                if(!this.state.listChatBox.includes(user)) {
+                    user.incommingMessage = {
+                        id: userID,
+                        message: message
+                    }
+                    this.setState({
+                        listChatBox: [...this.state.listChatBox, user]
+                    })
+                }
+                return;
+            }
+        }
+    }
+
     openChatBox(user){
         if(!this.state.listChatBox.includes(user)) {
+            user.incommingMessage = null;
             this.setState({
                 listChatBox: [...this.state.listChatBox, user]
             })
-            this.props.socket.emit('open chatbox from client', user._id)
         }
     }
 
@@ -77,9 +97,9 @@ class FriendList extends Component {
     }
 
     renderChatBox() {
-        return this.state.listChatBox.map(user => {
+        return this.state.listChatBox.map((user, index) => {
             return (
-                <ChatBox key={user} user={user} onCloseChatBox={this.closeChatBox} socket={this.props.socket}/>
+                <ChatBox key={index} user={user} onCloseChatBox={this.closeChatBox} socket={this.props.socket}/>
             );
         })
     }
