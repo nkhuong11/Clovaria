@@ -13,11 +13,16 @@ import '../css/Navbar.css';
 class Navbar extends Component {
     constructor(props) {
         super(props);
+        console.log('------NAVBAR CONSTRUCTOR--------');
         
     }
 
+    componentWillMount() {
+        console.log('------NAVBAR WILL MOUNT--------');
+    }
+
     componentDidMount() {
-        this.props.getAllUsers();
+        console.log('------NAVBAR DID MOUNT--------');
     }
 
     onLogout(e) {
@@ -27,11 +32,17 @@ class Navbar extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        // console.log('Navbar will receive props');
-        // console.log('componentWillReceiveProps nextProps', nextProps.auth);
-        // console.log('componentWillReceiveProps thisProps', this.props.auth);
+        console.log('------NAVBAR WILL ReceiveProps--------');
+        if(!this.props.auth.isAuthenticated &&  nextProps.auth.isAuthenticated) {
+            this.props.getAllUsers();
+        } 
+        
         if(this.props.auth.isAuthenticated && !nextProps.auth.isAuthenticated) {
-            this.props.socket.emit('user logout', this.props.auth.user._id);
+            let user = {
+                id: this.props.auth.user._id,
+                friend_list: this.props.auth.user.friend_list
+            }
+            this.props.socket.emit('user logout', user);
         } 
     }
 

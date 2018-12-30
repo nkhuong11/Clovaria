@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../actions/authentication';
-import { getAllUsers } from '../actions/getData';
 import classnames from 'classnames';
 
 class LoginPage extends Component {
@@ -37,7 +36,11 @@ class LoginPage extends Component {
     componentDidMount() {
         //console.log('LoginPage Did Mount', this.props.auth.user._id);
         if(this.props.auth.isAuthenticated) {
-            this.props.socket.emit('user login', this.props.auth.user._id); //emit login signal
+            let user = {
+                id: this.props.auth.user._id,
+                friend_list: this.props.auth.user.friend_list
+            }
+            this.props.socket.emit('user login', user); //emit login signal
             this.props.history.push('/');
         }
     }
@@ -45,8 +48,12 @@ class LoginPage extends Component {
     componentWillReceiveProps(nextProps) {
         //console.log('componentWillReceiveProps', nextProps.auth.user._id);
         if(nextProps.auth.isAuthenticated) {
-            this.props.socket.emit('user login', nextProps.auth.user._id);
-            this.props.history.push('/profile')
+            let user = {
+                id: nextProps.auth.user._id,
+                friend_list: nextProps.auth.user.friend_list
+            }
+            this.props.socket.emit('user login', user);
+            this.props.history.push('/')
         }
 
         if(nextProps.errors) {

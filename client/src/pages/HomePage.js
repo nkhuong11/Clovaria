@@ -7,13 +7,14 @@ import './css/HomePage.css'
 class HomePage extends Component {
     constructor(props) {
         super(props);
-        
+       
+
     }
     
     componentWillMount() {
         if(!this.props.auth.isAuthenticated) {
             this.props.history.push('/login');
-        }
+        } else {}
         console.log('HOME PAGE')
     }
 

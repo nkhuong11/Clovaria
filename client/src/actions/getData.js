@@ -2,6 +2,7 @@ import axios from 'axios';
 import { GET_ALL_DATA, GET_ERRORS } from './types';
 
 export const getAllUsers = () => dispatch => {
+    console.log('get all user');
     axios.get('/api/get/users')
         .then(res => {
             const {data} = res;

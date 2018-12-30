@@ -7,7 +7,7 @@ import socketIOClient from "socket.io-client";
 
 import setAuthToken from './services/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authentication';
-//import { getAllUsers } from './actions/getData';
+import { getAllUsers } from './actions/getData';
 import Navbar from './components/Navbar/Navbar';
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
@@ -24,28 +24,20 @@ class App extends Component {
   constructor() {
     super();
     this.checkjwtToken();
-
     this.socket = socketIOClient('http://localhost:5000');
-    this.socket.on('active users', (data) => {
-      console.log('active users', data);
-    })
-    
-    this.socket.on('open chatbox from server', (id) => {
-      console.log('message: ' + id);
-    })
-
   }
 
   checkjwtToken(){
     if(localStorage.jwtToken) {
       setAuthToken(localStorage.jwtToken);
       const decoded = jwt_decode(localStorage.jwtToken);
-      store.dispatch(setCurrentUser(decoded));
       const currentTime = Date.now() / 1000;
       if(decoded.exp < currentTime) {
         store.dispatch(logoutUser());
         window.location.href = '/login'
       }
+      store.dispatch(setCurrentUser(decoded));
+      store.dispatch(getAllUsers());
     }
   }
 

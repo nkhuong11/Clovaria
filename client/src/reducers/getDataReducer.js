@@ -7,6 +7,7 @@ const initialState = {
 export default function(state = initialState, action ) {
     switch(action.type) {
         case GET_ALL_DATA:
+            console.log('GET_ALL_DATA')
             return {
                 ...state,
                 all_users: action.payload.all_users

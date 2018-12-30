@@ -5,36 +5,85 @@ class Socket {
         this.io = socket;
         this.socketEvents = this.socketEvents.bind(this);
         this.updateConnectedUsers = this.updateConnectedUsers.bind(this);
+        this.sendOnlineStatusToFriends = this.sendOnlineStatusToFriends.bind(this);
+        this.sendOfflineStatusToFriends = this.sendOfflineStatusToFriends.bind(this);
+        this.getActiveFriendList = this.getActiveFriendList.bind(this);
+    }
+
+    sendOnlineStatusToFriends(friend_list, socket){
+        if (connectedUsers.length !== 0) {
+            let activeUser = Object.keys(connectedUsers);
+            for (let i = 0; i < friend_list.length; i++) {
+                if(activeUser.includes(friend_list[i])) {
+                    let ID = connectedUsers[friend_list[i]].id // get the socket id of this friend
+                    socket.to(ID).emit('new online signal', socket.userID)
+                }
+            }
+        }
+        return;
+    }
+
+    sendOfflineStatusToFriends(friend_list, socket){
+        if (connectedUsers.length !== 0) {
+            let activeUser = Object.keys(connectedUsers);
+            for (let i = 0; i < friend_list.length; i++) {
+                if(activeUser.includes(friend_list[i])) {
+                    let ID = connectedUsers[friend_list[i]].id // get the socket id of this friend
+                    socket.to(ID).emit('new offline signal', socket.userID)
+                }
+            }
+        }
+        return;
     }
 
     updateConnectedUsers(){
-        // sending to all connected clients
-        this.io.emit('active users', Object.keys(connectedUsers));
+        //using for new register
+        this.io.emit('update active users', Object.keys(connectedUsers));
+    }
+
+    getActiveFriendList(friendList, socket){
+        if (connectedUsers.length !== 0) {
+            let activeUser = Object.keys(connectedUsers);
+            let activeFriendList = [];
+            for (let i = 0; i < friendList.length; i++) {
+                if(activeUser.includes(friendList[i])) {
+                    activeFriendList.push(friendList[i])
+                }
+            }
+            socket.emit('response active friend list', activeFriendList);
+        }
+        return;
     }
 
     socketEvents() {
 
-
         this.io.on('connection', (socket) => {
             console.log("New access")
-            socket.on('user login', (userID) => {
-                if (userID in connectedUsers){
-                    console.log(`${userID} is already in connectedUsers`)
+            socket.on('user login', (user) => {
+                if (user.id in connectedUsers){
+                    console.log(`${user.id} is already in connectedUsers`)
                 } else {
-                    console.log(`Add ${userID} to connectedUsers`)
-                    socket.id = userID;
-                    connectedUsers[socket.id] = socket;
+                    socket.userID = user.id;
+                    connectedUsers[user.id] = socket;
                     this.updateConnectedUsers();
+                    this.sendOnlineStatusToFriends(user.friend_list, socket);
+                    this.getActiveFriendList(user.friend_list,socket);
                 }    
                 console.log('connectedUsers: ', Object.keys(connectedUsers));
             });
 
-            socket.on('user logout', (userID) => {
+            socket.on('user logout', (user) => {
                 console.log('User logout');
-                delete connectedUsers[userID];
+                this.sendOfflineStatusToFriends(user.friend_list, socket, '');
+                delete connectedUsers[user.id];
                 this.updateConnectedUsers();
                 console.log('connectedUsers: ', Object.keys(connectedUsers));
             });
+
+            socket.on('request active friend list', (friendList) => {
+                console.log(friendList)
+                this.getActiveFriendList(friendList,socket);
+            })
 
             socket.on('send message', (data) => {
                 //userID: id of friend that we send message to
@@ -54,105 +103,10 @@ class Socket {
                 console.log('connectedUsers: ', Object.keys(connectedUsers));
             });
 
-           
-            
-            // ```Get the user's chat list```
-
-            // socket.on('chat-list', (data) => {
- 
-            //     let chatListResponse = {};
-  
-            //      if (data.userId == '') {
-  
-            //          chatListResponse.error = true;
-            //          chatListResponse.message = `User does not exits.`;
-                     
-            //          this.io.emit('chat-list-response',chatListResponse);
-  
-            //      } else {
-  
-            //          helper.getUserInfo( data.userId,(err, UserInfoResponse)=>{
-  
-            //              delete UserInfoResponse.password;
-            //              delete UserInfoResponse.timestamp;
-                         
-            //              helper.getChatList(data.userId, (err, response)=>{
-                             
-            //                  this.io.to(socket.id).emit('chat-list-response',{
-            //                      error : false ,
-            //                      singleUser : false ,
-            //                      chatList : response === null ? null : response.users
-            //                  });
-  
-            //                  if (response !== null) {
-            //                      let chatListIds = response.socketIds;
-            //                      chatListIds.forEach( (Ids)=>{
-            //                          this.io.to(Ids.socketId).emit('chat-list-response',{
-            //                              error : false ,
-            //                              singleUser : true ,
-            //                              chatList : UserInfoResponse
-            //                          });
-            //                      });
-            //                  }
-            //              });
-            //          });
-            //      }
-            // });
-            /**
-            * Logout the user
-            */
-        //    socket.on('logout',(data)=> {
- 
-        //         const userId = data.userId;
-        //         helper.logout(userId , (error, result)=>{
-        //             this.io.to(socket.id).emit('logout-response',{
-        //                 error : false
-        //             });
-        //             socket.disconnect();
-        //         }); 
-        //     });
-
-
-        /**
-        * sending the disconnected user to all socket users. 
-        */
-            // socket.on('disconnect',()=>{
-            //     setTimeout(()=>{
-            //         helper.isUserLoggedOut(socket.id,(response)=>{
-            //             if (response.loggedOut) {
-            //                 socket.broadcast.emit('chat-list-response',{
-            //                     error : false ,
-            //                     userDisconnected : true ,
-            //                     socketId : socket.id
-            //                 });
-            //             }
-            //         });
-            //     },1000);
-            // });
-
         });
     }
 
     socketConfig(){
- 
-        // this.io.use(function(socket, next) {
-        //     let userID = socket.request._query['userId'];
-        //     let userSocketId = socket.id;
-        //     const data = {
-        //         id : userID,
-        //         value : {
-        //             $set :{
-        //                 socketId : userSocketId,
-        //                 online : 'Y'
-        //             }
-        //         }
-        //     }
- 
-        //     helper.addSocketId( data ,(error,response)=>{
-        //         next();
-        //     });
-        // });
- 
         this.socketEvents();
     }
 

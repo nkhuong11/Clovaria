@@ -3,6 +3,7 @@ import { GET_ERRORS, SET_CURRENT_USER } from './types';
 import setAuthToken from '../services/setAuthToken';
 import jwt_decode from 'jwt-decode';
 
+
 export const registerUser = (user, history) => dispatch => {
     axios.post('/api/users/register', user)
             .then(res => history.push('/login'))
