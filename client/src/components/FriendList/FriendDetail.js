@@ -9,19 +9,32 @@ class FriendDetail extends Component {
             show: false
         }
         this.openChatBox = this.openChatBox.bind(this);
+        this.isActive = this.isActive.bind(this);
     }
 
     openChatBox() {
         this.props.onOpenChatBox(this.props.user);
     }
 
+    isActive(user) {
+        if (user.isActive) {
+            return (
+                <img src={user.avatar} alt={user.username} title={user.username}
+                        className="rounded-circle friend-avatar-active" />
+            );
+        } else {
+            return (
+                <img src={user.avatar} alt={user.username} title={user.username}
+                        className="rounded-circle friend-avatar" />
+            );
+        }
+    }
     
     render(){
         const {user} = this.props;
         return (
             <div className="custom-wrapper" onClick={this.openChatBox}> 
-                <img src={user.avatar} alt={user.username} title={user.username}
-                        className="rounded-circle friend-avatar" />
+                {this.isActive(user)}
                 <div className="user-name">
                     {this.props.user.username}
                 </div>

@@ -72,6 +72,7 @@ input {
 }
 
 .friend-message-container {
+    display: flex;
     align-items: center;
     margin-right: auto;
     max-width: 65%;
@@ -96,4 +97,17 @@ input {
     padding: 2px 7px 5px 7px;
     border-radius: 4px !important;
     height: 100%;
+}
+
+.username-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.online-signal {
+    width: 5px;
+    height: 5px;
+    background: #00ff00;
+    margin-right: 5px;
 }

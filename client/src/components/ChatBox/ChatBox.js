@@ -23,18 +23,21 @@ class ChatBox extends Component {
         this.updateInputValue = this.updateInputValue.bind(this);
         this.updateMessage = this.updateMessage.bind(this);
         this.renderMessages = this.renderMessages.bind(this);
-
-        this.props.socket.on('receive message', (message) => {
-            this.updateMessage(message)
+        this.isOnline = this.isOnline.bind(this);
+        this.props.socket.on('receive message', (data) => {
+            this.updateMessage(data)
         })
         
     }
     
 
-    updateMessage(message) {
-        this.setState(prevState  => ({
-            messageHistory: [...prevState.messageHistory, message]
-        }));
+    updateMessage(data) {
+        if(data.id === this.props.user._id) {
+            this.setState(prevState  => ({
+                messageHistory: [...prevState.messageHistory, data]
+            }));
+        }
+        
     }
 
     onEnterPress(mess) {
@@ -47,6 +50,14 @@ class ChatBox extends Component {
                     }]
             }));
         
+    }
+
+    isOnline(){
+        if(this.props.user.isActive) {
+            return (
+                <div className="rounded-circle online-signal"/>
+            );
+        }
     }
 
     updateInputValue(e) {
@@ -100,7 +111,10 @@ class ChatBox extends Component {
         return (
             <div className="chatbox-container">
                 <div className="chatbox-header">
-                    {user.username}
+                    <div className="username-wrapper">
+                        {this.isOnline()}
+                        {user.username}
+                    </div>
                     <div className="close-chatbox-btn" onClick={() => this.closeChatBox(user)}>
                         X
                     </div>

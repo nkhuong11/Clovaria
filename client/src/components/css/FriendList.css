@@ -30,6 +30,13 @@ li {
     margin: 5px
 }
 
+.friend-avatar-active {
+    border: 2px solid #00ff00;
+    width: 35px;
+    height: 35px;
+    margin: 5px
+}
+
 
 .list-chatbox-container {
     display: flex;

@@ -13,16 +13,16 @@ import '../css/Navbar.css';
 class Navbar extends Component {
     constructor(props) {
         super(props);
-        console.log('------NAVBAR CONSTRUCTOR--------');
+        //console.log('------NAVBAR CONSTRUCTOR--------');
         
     }
 
     componentWillMount() {
-        console.log('------NAVBAR WILL MOUNT--------');
+        //console.log('------NAVBAR WILL MOUNT--------');
     }
 
     componentDidMount() {
-        console.log('------NAVBAR DID MOUNT--------');
+        //console.log('------NAVBAR DID MOUNT--------');
     }
 
     onLogout(e) {
@@ -32,7 +32,7 @@ class Navbar extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('------NAVBAR WILL ReceiveProps--------');
+        //console.log('------NAVBAR WILL ReceiveProps--------');
         if(!this.props.auth.isAuthenticated &&  nextProps.auth.isAuthenticated) {
             this.props.getAllUsers();
         } 

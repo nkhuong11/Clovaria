@@ -61,7 +61,8 @@ class Socket {
             console.log("New access")
             socket.on('user login', (user) => {
                 if (user.id in connectedUsers){
-                    console.log(`${user.id} is already in connectedUsers`)
+                    this.sendOnlineStatusToFriends(user.friend_list, socket);
+                    this.getActiveFriendList(user.friend_list,socket);
                 } else {
                     socket.userID = user.id;
                     connectedUsers[user.id] = socket;
@@ -74,7 +75,7 @@ class Socket {
 
             socket.on('user logout', (user) => {
                 console.log('User logout');
-                this.sendOfflineStatusToFriends(user.friend_list, socket, '');
+                this.sendOfflineStatusToFriends(user.friend_list, socket);
                 delete connectedUsers[user.id];
                 this.updateConnectedUsers();
                 console.log('connectedUsers: ', Object.keys(connectedUsers));
@@ -89,9 +90,9 @@ class Socket {
                 //userID: id of friend that we send message to
                 if (data.toID in connectedUsers){
                     //if this user is online
-                    connectedUsers[data.toID].emit('receive message', {id: socket.id, message: data.message});
+                    //connectedUsers[data.toID].emit('receive message', {id: socket.id, message: data.message});
+                    this.io.to(connectedUsers[data.toID].id).emit('receive message', {id: socket.userID, message: data.message});
                 }
-               
             });
             
             socket.on('disconnect', (data) => {

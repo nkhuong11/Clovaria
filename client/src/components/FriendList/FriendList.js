@@ -11,7 +11,6 @@ class FriendList extends Component {
         super(props);
         this.state = {
             friendList: [],
-            activeFriendList: [],
             listChatBox: [],
         }
 
@@ -24,14 +23,11 @@ class FriendList extends Component {
         this.renderChatBox = this.renderChatBox.bind(this);
         this.autoOpenChatBox = this.autoOpenChatBox.bind(this);
         this.getActiveFriendList = this.getActiveFriendList.bind(this);
-        this.updateActiveFriendList = this.updateActiveFriendList.bind(this);
-        
-        
-        this.getActiveFriendList();
+        this.updateOnlineFriendList = this.updateOnlineFriendList.bind(this);
 
         this.props.socket.on('response active friend list', (activeFriendList) => {
             console.log('response active friend list: ', activeFriendList);
-            this.updateActiveFriendList(activeFriendList);
+            this.updateOnlineFriendList(activeFriendList);
         })
 
         this.props.socket.on('update active users', (activeUsers) => {
@@ -40,34 +36,45 @@ class FriendList extends Component {
 
         this.props.socket.on('new online signal', (userID) => {
             console.log('new online signal');
-            this.updateActiveFriendList([userID]);
+            this.updateOnlineFriendList([userID]);
         })
 
         this.props.socket.on('new offline signal', (userID) => {
             console.log('new offline signal');
-            this.updateActiveFriendList([userID]);
+            this.updateOfflineFriendList([userID]);
         })
 
 
         this.props.socket.on('receive message', (data) => {
             this.autoOpenChatBox(data.id, data.message);
         })
+
+        //this.getActiveFriendList();
     }
 
-    updateActiveFriendList(activeFriendList){
-        console.log('updateActiveFriendList FUNCTION');
+    updateOnlineFriendList(onlineFriendList){
+        console.log('updateOnlineFriendList FUNCTION');
         //update state
-        console.log('Active friend list: ', activeFriendList);
-        console.log('this state: ', this.state);
-        console.log('this props: ', this.props);
+
         this.setState({
-            activeFriendList: activeFriendList
-        })
+            friendList: this.state.friendList.map(each => (onlineFriendList.includes(each._id) ? Object.assign({}, each, { isActive:true }) : each)),
+            listChatBox: this.state.listChatBox.map(each => (onlineFriendList.includes(each._id) ? Object.assign({}, each, { isActive:true }) : each))
+          });
     }
 
-    getActiveFriendList() {
-        console.log('request active friend list');
-        this.props.socket.emit('request active friend list', this.props.currentUser.friend_list);
+    updateOfflineFriendList(offlineFriendList){
+        console.log('updateOfflineFriendList FUNCTION');
+        //update state
+
+        this.setState({
+            friendList: this.state.friendList.map(each => (offlineFriendList.includes(each._id) ? Object.assign({}, each, { isActive:false }) : each)),
+            listChatBox: this.state.listChatBox.map(each => (offlineFriendList.includes(each._id) ? Object.assign({}, each, { isActive:false }) : each))
+          });
+    }
+
+    getActiveFriendList(friend_list) {
+        console.log('request active friend list', friend_list);
+        this.props.socket.emit('request active friend list', friend_list);
     }
     
     componentDidMount() {
@@ -82,16 +89,12 @@ class FriendList extends Component {
     componentWillReceiveProps(nextProps) {
         console.log('------FRIENDLIST componentWillReceiveProps--------');
 
-        if(this.props.allUser !== nextProps.allUser ) {
+        if((this.props.allUser !== nextProps.allUser) || (this.props.currentUser !== nextProps.currentUser)) {
             let friendList = this.getFriendListData(nextProps.currentUser.friend_list, nextProps.allUser);
-            this.setState({friendList})
+            this.setState({friendList});
+            this.getActiveFriendList(nextProps.currentUser.friend_list);
         }
 
-        if(this.props.currentUser !== nextProps.currentUser) 
-        {
-            let friendList = this.getFriendListData(nextProps.currentUser.friend_list, nextProps.allUser);
-            this.setState({friendList})
-        }
     }
 
     getFriendListData(friend_list, all_user){
