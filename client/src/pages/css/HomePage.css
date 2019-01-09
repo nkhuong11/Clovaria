@@ -13,11 +13,45 @@
     float: left;
     margin-right: 28px;
     align-items: center;
-    background-color: #fff;
-    height:100%;
+    height:auto;
     width:90%;
     left: 0;
     top: 0;
-    overflow:auto;
-    border: solid 1px #dbdbdb;
+    overflow: auto;
+}
+
+.homepage-post {
+    display: flex;
+    flex-direction: column;
+    float: left;
+    align-items: center;
+    background-color: transparent;
+    height:100%;
+    width:100%;
+    left: 0;
+    top: 0;
+}
+
+
+.user-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.bold-text {
+    font-size: 15px;
+    margin-left: 5px;
+    font-weight: 600;
+    padding: 3px;
+    cursor: pointer;
+}
+
+.user-avatar {
+    border: 1px solid #dadada;
+    width: 50px;
+    height: 50px;
+    margin-right: 5px;
+    margin-bottom: 20px;
+    cursor: pointer;
 }

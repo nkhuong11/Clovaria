@@ -82,14 +82,16 @@ input {
 }
 
 .message-continue {
-    margin-left: 35px;
+    margin-left: 40px;
 }
 
-.user-avatar {
-    border: 0 solid #000;
-    width: 30px;
-    height: 30px;
+.chatbox-user-avatar {
+    border: 1px solid #dadada;
+    width: 35px;
+    height: 35px;
     margin-right: 5px;
+    border-radius: 50%;
+    margin-bottom: 0px;
 }
 
 .message {

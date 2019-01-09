@@ -16,6 +16,7 @@ class SearchBar extends Component {
         this.renderUserList = this.renderUserList.bind(this);
         this.onFollowClicked = this.onFollowClicked.bind(this);
         this.isFriended = this.isFriended.bind(this);
+        this.goToUserProfile = this.goToUserProfile.bind(this);
     }
 
 
@@ -33,7 +34,6 @@ class SearchBar extends Component {
         })
         if(e.target.value !== '') {
             const users = this.findUser(e.target.value, this.props.allUser);
-            //console.log(users)
             if(users) {
                 if (users !== this.state.usersResults) {
                     this.setState({
@@ -104,6 +104,10 @@ class SearchBar extends Component {
             })
     }
 
+    goToUserProfile(userURL) {
+        //this.props.history.push(`/${userURL}`);
+    }
+
     isFriended(user){
         return this.props.thisUser.friend_list.includes(user._id) ? true : false
     }
@@ -112,8 +116,8 @@ class SearchBar extends Component {
         return usersResults.map((user, index) => {
             if (this.isFriended(user)) {
                 return (
-                    <a className="user-detail-wrapper" key={index} href="#">
-                        <div className="custom-wrapper"> 
+                    <div className="user-detail-wrapper" key={index} href="#">
+                        <div className="custom-wrapper" onClick={() => this.goToUserProfile(user.username)}> 
                             <img src={user.avatar} alt={user.username} title={user.username}
                                     className="rounded-circle"
                                     style={{ width: '30px', height: '30px', margin: '5px'}} />
@@ -124,7 +128,7 @@ class SearchBar extends Component {
                         <button className="friended-button" onClick={() => this.onUnfollowClicked(user)}>
                             Friend
                         </button>
-                    </a>
+                    </div>
                 )
             } else { 
                 return (

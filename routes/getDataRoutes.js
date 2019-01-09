@@ -20,4 +20,29 @@ router.get('/users', (req, res) => {
         })
 });
 
+router.get('/user/:username', (req, res) => {
+    const username = req.params.username;
+    User.findOne({username: username}).select('-password')
+        .exec()
+        .then(user => {
+                if(!user) {
+                    error = 'User not found'
+                    return res.status(404).json(error);
+                }   
+                            
+                const result = {
+                    _id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    avatar: user.avatar,
+                    friend_list: user.friend_list
+                }
+
+                res.json({
+                    success: true,
+                    user: result
+                });
+        });
+});
+
 module.exports = router;

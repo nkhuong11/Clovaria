@@ -31,6 +31,7 @@ class Wrapper extends Component {
     }
 
     render() {
+        // const profileURL = `/profile/${this.props.auth.user.username}`
         return (
             <Router>
                 <div className="root-container">
@@ -38,7 +39,7 @@ class Wrapper extends Component {
                     <div className="body-container">
                         <Route exact path="/login" render={props => (<LoginPage {...props} socket={this.props.socket}/>)} />
                         <Route exact path="/register" render={props => (<RegisterPage {...props} socket={this.props.socket}/>)} />
-                        <Route exact path="/profile" render={props => (<ProfilePage {...props} socket={this.props.socket}/>)} />
+                        <Route exact path="/profile/:username" render={props => (<ProfilePage {...props} socket={this.props.socket}/>)} />
                         <Route exact path="/" render={props => (<HomePage {...props} socket={this.props.socket}/>)} />
                     </div>
                 </div>

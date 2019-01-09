@@ -1,12 +1,20 @@
 import React, {Component } from 'react';
 
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 import './css/ProfilePage.css';
 
 class ProfilePage extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            avatar: "",
+            email: "",
+            username: "",
+            _id: "",
+            friend_list: []
+        }
         this.onClick = this.onClick.bind(this);
     }
 
@@ -15,14 +23,28 @@ class ProfilePage extends Component {
     }
 
     componentDidMount() {
-        if(!this.props.auth.isAuthenticated) {
-            this.props.history.push('/login');
-            console.log(this.props.auth)
-        }
+        const {username} = this.props.match.params
+        axios.get(`/api/get/user/${username}`)
+            .then(res => {
+                this.setState({
+                    avatar: res.data.user.avatar,
+                    email: res.data.user.email,
+                    username: res.data.user.username,
+                    _id: res.data.user._id,
+                    friend_list: res.data.user.friend_list
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        // if(!this.props.isAuthenticated) {
+        //     this.props.history.push('/login');
+        //     console.log(this.props.auth)
+        // }
     }
     
     render() {
-        const { username, id, email, avatar } = this.props.auth.user;
+        const { username, _id, email, avatar } = this.state
 
         return (
             <div>
@@ -48,7 +70,8 @@ class ProfilePage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    auth: state.auth,
+    isAuthenticated: state.auth.isAuthenticated,
+    currentUser: state.auth.user,
 })
 
 export default connect(mapStateToProps)(ProfilePage)

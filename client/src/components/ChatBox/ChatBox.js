@@ -93,7 +93,7 @@ class ChatBox extends Component {
                     return (
                         <div key={index} className="friend-message-container">
                             <img src={this.props.user.avatar} alt={this.props.user.username} title={this.props.user.username}
-                                className="rounded-circle user-avatar"/>
+                                className="chatbox-user-avatar"/>
                             <div className="message">
                                 {currentMessage.message}
                             </div>

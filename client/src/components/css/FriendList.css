@@ -12,8 +12,8 @@ li {
     max-width: 300px;
     background-color: #fff;
     border: solid 1px #dbdbdb;
-    height: 55%;
-    max-height: 55%;
+    height: 300px;
+    max-height:300px;
     min-height: 0;
     overflow: auto;
 }

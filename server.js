@@ -11,8 +11,6 @@ require('./models/User');
 //Socket Events
 const socketEvents = require('./utils/socket'); 
 
-
-
 //import routes
 authenticateRoutes = require('./routes/authenticate');
 uploadRoutes = require('./routes/uploadRoutes');

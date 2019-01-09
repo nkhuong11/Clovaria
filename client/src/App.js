@@ -19,8 +19,8 @@ class App extends Component {
   constructor() {
     super();
     this.checkjwtToken();
-    this.socket = socketIOClient('https://safe-ridge-22159.herokuapp.com');
-    //this.socket = socketIOClient('http://localhost:5000');
+    //this.socket = socketIOClient('https://safe-ridge-22159.herokuapp.com');
+    this.socket = socketIOClient('http://localhost:5000');
     
   }
 
