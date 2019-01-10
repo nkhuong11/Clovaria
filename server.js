@@ -48,7 +48,7 @@ userFunctionalRoutes = require('./routes/userFunctionalRoutes');
 //   }
 
 //   includeRoutes(){
-//     this.app.use('/api/users', authenticateRoutes, userFunctionalRoutes); //register, login and other functional
+//     this.app.use('/api/user', authenticateRoutes, userFunctionalRoutes); //register, login and other functional
 //     this.app.use('/api/upload', uploadRoutes);
 //     this.app.use('/api/get', getDataRoutes);
 //   }
@@ -106,7 +106,7 @@ mySocketEvents = new socketEvents(socket).socketConfig();
 
 //  ROUTES
 
-app.use('/api/users', authenticateRoutes, userFunctionalRoutes); //register, login and other functional
+app.use('/api/user', authenticateRoutes, userFunctionalRoutes); //register, login and other functional
 app.use('/api/upload', uploadRoutes);
 app.use('/api/get', getDataRoutes);
 

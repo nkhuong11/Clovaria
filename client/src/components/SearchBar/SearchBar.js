@@ -58,12 +58,12 @@ class SearchBar extends Component {
             user1_id: this.props.thisUser._id,
             user2_id: user._id
         }
-        axios.post('/api/users/addfriend', couple_id)
+        axios.post('/api/user/addfriend', couple_id)
             .then(res => {
                 const {success} = res.data;
                 if(success) {
                     //fetch current user => Update after add friend.
-                    axios.post('/api/users/me', { email: this.props.thisUser.email})
+                    axios.post('/api/user/me', { email: this.props.thisUser.email})
                         .then(res => {
                             const { token } = res.data;
                             localStorage.setItem('jwtToken', token);
@@ -84,12 +84,12 @@ class SearchBar extends Component {
             user1_id: this.props.thisUser._id,
             user2_id: user._id
         }
-        axios.post('/api/users/unfriend', couple_id)
+        axios.post('/api/user/unfriend', couple_id)
             .then(res => {
                 console.log(res.data.message)
                 if(res.data.success) {
                     //fetch current user => Update after add friend.
-                    axios.post('/api/users/me', { email: this.props.thisUser.email})
+                    axios.post('/api/user/me', { email: this.props.thisUser.email})
                         .then(res => {
                             const { token } = res.data;
                             localStorage.setItem('jwtToken', token);

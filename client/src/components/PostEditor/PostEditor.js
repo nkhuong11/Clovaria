@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import axios from 'axios';
+
 import ModalWrapper from '../Modal/ModalWrapper';
 
 import '../css/PostEditor.css'
@@ -9,7 +12,7 @@ class PostEditor extends Component {
         this.state = {
             text: '',
             reviewImageURL: '',
-            imageURL: 'fsfsdfsdf',
+            imageURL: '',
             showModal: false,
             showImageReview: false,
         };
@@ -38,10 +41,27 @@ class PostEditor extends Component {
     }
 
     onSubmitPost() {
-        console.log(this.state.text);
-        this.setState({
-            text: ""
-        });
+        const post = {
+            content: this.state.text,
+            image_url: this.state.imageURL,
+            owner: this.props.user._id 
+        }
+        axios.post('/api/user/create-post', post)
+            .then(res => {
+                this.setState({
+                    text: '',
+                    reviewImageURL: '',
+                    imageURL: '',
+                });
+                if(res.data.success) {
+                    this.props.updatePost(res.data.post);
+
+                    this.props.socket.emit('SEND UPDATE POST SIGNAL TO FRIEND', this.props.user.friend_list);
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
     
     onImageReviewClick() {
@@ -105,4 +125,9 @@ class PostEditor extends Component {
     }
 }
 
-export default PostEditor;
+const mapStateToProps = (state) => ({
+    isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user
+})
+
+export default connect(mapStateToProps)(PostEditor);

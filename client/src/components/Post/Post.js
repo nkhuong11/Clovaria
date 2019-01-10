@@ -8,30 +8,27 @@ class Post extends Component {
     }
 
     render() {
-        const nickname = "Admin",
-                avatar = "https://www.gravatar.com/avatar/75d23af433e0ce", 
-                image = "https://pbs.twimg.com/media/DMDIKcyWsAEsKDj.jpg",
-                caption = "This is my post"
+        const {owner, image_url, content, loved_by, shared_by} = this.props
         
         
         return <article className="Post" ref="Post">
                 <header>
                     <div className="Post-user">
                     <div className="Post-user-avatar">
-                        <img src={avatar} alt={nickname} />
+                        <img src={owner.avatar} alt={owner.username} />
                     </div>
                     <div className="Post-user-nickname">
-                        <span>{nickname}</span>
+                        <span>{owner.username}</span>
                     </div>
                     </div>
                 </header>
                 <div className="Post-image">
                     <div className="Post-image-bg">
-                    <img alt={caption} src={image} />
+                    <img alt={content} src={image_url} />
                     </div>
                 </div>
                 <div className="Post-caption">
-                    <strong>{nickname}</strong> {caption}
+                    <strong>{owner.username}</strong> {content}
                 </div>
             </article>;
         }

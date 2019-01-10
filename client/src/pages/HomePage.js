@@ -9,9 +9,16 @@ import './css/HomePage.css'
 class HomePage extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            posts: []
+        }
         this.onProfileClick = this.onProfileClick.bind(this);
-       
+        this.updatePost = this.updatePost.bind(this);
+        this.renderPost = this.renderPost.bind(this);       
 
+        this.props.socket.on('NEW UPDATE POST SIGNAL', (userID) => {
+            console.log(userID);
+        })
     }
     
     componentWillMount() {
@@ -24,17 +31,29 @@ class HomePage extends Component {
         this.props.history.push(`/profile/${this.props.auth.user.username}`);
     }
 
+    updatePost(post){
+        this.setState(prevState => ({
+            posts: [...prevState.posts, post]
+        }))
+    }
+
+    renderPost() {
+        return this.state.posts.map((post, index) => {
+            return (
+                <Post key={index} owner={post.owner} image_url={post.image_url} content={post.content} loved_by={post.loved_by} shared_by={post.shared_by}/>
+            );
+        })
+    }
+
     render() {
         const {user} = this.props.auth
 
         return (
             <div className="homepage-container">
                 <div className="homepage">
-                    <PostEditor/>
+                    <PostEditor updatePost={this.updatePost} socket={this.props.socket}/>
                     <div className="homepage-post">
-                       <Post/>
-                       <Post/>
-                       <Post/>
+                       {this.renderPost()}
                     </div>
                 </div>
                 <div > 

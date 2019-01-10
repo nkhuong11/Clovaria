@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const passport = require('passport');
 const validateRegisterInput = require('../services/validation/register');
 const validateLoginInput = require('../services/validation/login');
 
@@ -26,16 +24,11 @@ router.post('/register', function(req, res) {
             });
         }
         else {
-            const avatar = gravatar.url(req.body.email, {
-                s: '200',
-                r: 'pg',
-                d: 'mm'
-            });
             const newUser = new User({
                 username: req.body.username,
                 email: req.body.email,
                 password: req.body.password,
-                avatar
+                avatar: 'http://www.gravatar.com/avatar/75d23af433e0cea4c0e45a56dba18b30?s=200&r=pg&d=mm'
             });
             
             bcrypt.genSalt(10, (err, salt) => {

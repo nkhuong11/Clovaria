@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
 
 const User = require('../models/User');
+const Post = require('../models/Post');
 
 //router.post('/addfriend', passport.authenticate('jwt', { session: false }), function(req, res) {
 router.post('/addfriend', (req, res) => {
@@ -63,6 +63,24 @@ router.post('/unfriend', (req, res) => {
            
         }
     });    
+});
+
+router.post('/create-post', (req, res) => {
+    const newPost = new Post({
+        content: req.body.content,
+        image_url: req.body.image_url,
+        owner: req.body.owner,
+    });
+    newPost.save()
+
+    Post.populate(newPost, {path: 'owner', select: 'username avatar email'}, (err, post) => {
+            if (err) return handleError(err);
+            res.json({
+                success: true,
+                message: 'Created post successfully',
+                post: post
+            });
+        });
 });
 
 
