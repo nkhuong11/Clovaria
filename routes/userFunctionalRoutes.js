@@ -71,10 +71,24 @@ router.post('/create-post', (req, res) => {
         image_url: req.body.image_url,
         owner: req.body.owner,
     });
-    newPost.save()
+
+    newPost.save((err) => {
+        if (err) {
+            console.log(err);
+        }
+    })
+
+    //update post field in User
+    const post_id = newPost._id
+    User.findOneAndUpdate({_id: req.body.owner}, { $push: { posts: post_id  }}, { new: true}, (err, user) => {
+        if (err) {
+            console.log(err);
+        }
+        console.log(user);
+    })   
 
     Post.populate(newPost, {path: 'owner', select: 'username avatar email'}, (err, post) => {
-            if (err) return handleError(err);
+            if (err) console.log(err);
             res.json({
                 success: true,
                 message: 'Created post successfully',

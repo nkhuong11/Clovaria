@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 import FriendList from '../components/FriendList/FriendList';
 import PostEditor from '../components/PostEditor/PostEditor';
@@ -26,6 +27,18 @@ class HomePage extends Component {
             this.props.history.push('/login');
         } else {}
     }
+
+    componentDidMount() {
+        axios.get(`/api/get/posts/${this.props.auth.user._id}`)
+        .then(res => {
+            console.log(res.data);
+            // const friend_post = res.data.posts;
+            this.setState({
+                posts: res.data.posts
+            });
+        })
+    }
+    
 
     onProfileClick() {
         this.props.history.push(`/profile/${this.props.auth.user.username}`);

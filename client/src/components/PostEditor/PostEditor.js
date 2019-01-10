@@ -54,6 +54,7 @@ class PostEditor extends Component {
                     imageURL: '',
                 });
                 if(res.data.success) {
+                    console.log(res.data);
                     this.props.updatePost(res.data.post);
 
                     this.props.socket.emit('SEND UPDATE POST SIGNAL TO FRIEND', this.props.user.friend_list);

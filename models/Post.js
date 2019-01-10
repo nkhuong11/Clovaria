@@ -10,13 +10,13 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
-  owner: {type: Schema.Types.ObjectId, ref: 'users'},
+  owner: {type: Schema.Types.ObjectId, ref: 'User'},
   created_date: {
     type: Date,
     default: Date.now
   },
-  loved_by: [{type: Schema.Types.ObjectId, ref: 'users'}],
-  shared_by: [{type: Schema.Types.ObjectId, ref: 'users'}],
+  loved_by: [{type: Schema.Types.ObjectId, ref: 'User'}],
+  shared_by: [{type: Schema.Types.ObjectId, ref: 'User'}],
 });
 
 const Post = mongoose.model('Post', PostSchema);
