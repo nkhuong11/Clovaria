@@ -6,6 +6,7 @@ class Socket {
         this.socketEvents = this.socketEvents.bind(this);
         this.updateConnectedUsers = this.updateConnectedUsers.bind(this);
         this.sendSignalToFriends = this.sendSignalToFriends.bind(this);
+        this.sendNewPostToFriends = this.sendNewPostToFriends.bind(this);
         this.getActiveFriendList = this.getActiveFriendList.bind(this);
     }
 
@@ -16,6 +17,23 @@ class Socket {
                 if(activeUser.includes(friend_list[i])) {
                     let ID = connectedUsers[friend_list[i]].id // get the socket id of this friend
                     socket.to(ID).emit(signal, socket.userID)
+                }
+            }
+        }
+        return;
+    }
+
+    sendNewPostToFriends(signal, friend_list, post, socket) {
+        if (connectedUsers.length !== 0) {
+            let activeUser = Object.keys(connectedUsers);
+            for (let i = 0; i < friend_list.length; i++) {
+                if(activeUser.includes(friend_list[i])) {
+                    let ID = connectedUsers[friend_list[i]].id // get the socket id of this friend
+                    const data = {
+                        user_id: socket.userID,
+                        post: post
+                    }
+                    socket.to(ID).emit(signal, data)
                 }
             }
         }
@@ -82,8 +100,9 @@ class Socket {
                 }
             });
 
-            socket.on('SEND UPDATE POST SIGNAL TO FRIEND', (friend_list) => {
-                this.sendSignalToFriends('NEW UPDATE POST SIGNAL', friend_list, socket);
+            socket.on('SEND UPDATE POST SIGNAL TO FRIEND', (data) => {
+                const {friend_list, post } = data;
+                this.sendNewPostToFriends('UPDATE NEW POST SIGNAL', friend_list, post, socket);
             })
             
             socket.on('disconnect', (data) => {

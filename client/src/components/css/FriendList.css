@@ -8,8 +8,9 @@ li {
     justify-content: flex-start;
     border: solid 1px #dbdbdb;
     padding: 8px;
-    width: 300px;
-    max-width: 300px;
+    width: 250px;
+    max-width: 250px;
+    min-width: 200px;
     background-color: #fff;
     border: solid 1px #dbdbdb;
     height: 300px;

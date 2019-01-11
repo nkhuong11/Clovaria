@@ -84,7 +84,6 @@ router.post('/create-post', (req, res) => {
         if (err) {
             console.log(err);
         }
-        console.log(user);
     })   
 
     Post.populate(newPost, {path: 'owner', select: 'username avatar email'}, (err, post) => {
@@ -95,6 +94,21 @@ router.post('/create-post', (req, res) => {
                 post: post
             });
         });
+});
+
+router.post('/update-avatar', (req, res) => {
+    const {user_id, avatar_url} = req.body
+    //update avatar field in User
+    User.findOneAndUpdate({_id: user_id}, { $set: { avatar: avatar_url  }}, { new: true}, (err, user) => {
+        if (err) {
+            console.log(err);
+        }
+        res.json({
+            success: true,
+            message: 'Updated avatar successfully',
+            avatar: user.avatar,
+        });
+    })   
 });
 
 

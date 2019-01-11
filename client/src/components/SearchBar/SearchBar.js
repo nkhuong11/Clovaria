@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from '../../services/setAuthToken';
+
 
 import '../css/Searchbar.css'
 
@@ -11,6 +13,7 @@ class SearchBar extends Component {
         this.state = {
             searchContent: '',
             usersResults: [],
+            is_show_dropdown: false,
         }
         this.onSearchChange = this.onSearchChange.bind(this);
         this.renderUserList = this.renderUserList.bind(this);
@@ -37,17 +40,17 @@ class SearchBar extends Component {
             if(users) {
                 if (users !== this.state.usersResults) {
                     this.setState({
-                        usersResults: users
+                        usersResults: users,
                     })
                 }
             } else {
                 this.setState({
-                    usersResults: []
+                    usersResults: [],
                 }) 
             }
         }  else {
             this.setState({
-                usersResults: []
+                usersResults: [],
             }) 
         }
     }
@@ -104,8 +107,12 @@ class SearchBar extends Component {
             })
     }
 
-    goToUserProfile(userURL) {
-        //this.props.history.push(`/${userURL}`);
+    goToUserProfile(usernamwe) {
+        this.setState({
+            usersResults: [],
+            searchContent: ''
+        }) 
+        this.props.history.push(`/profile/${usernamwe}`);
     }
 
     isFriended(user){
@@ -158,7 +165,7 @@ class SearchBar extends Component {
                 <input className="searchbar" type="text" autoCapitalize="none" placeholder="Search" value={this.state.searchContent} name="searchContent"
                         onChange={this.onSearchChange} ref={node => this.node = node}/> 
                 <div className="user-result-list-wrapper">
-                    {(this.state.usersResults.length != 0) ? <div className="user-result-list">{listUser}</div> : <div></div>}    
+                    {(this.state.usersResults.length != 0 && this.state.searchContent !== '') ? <div className="user-result-list">{listUser}</div> : <div></div>}    
                 </div>   
             </div>
         )
@@ -167,4 +174,4 @@ class SearchBar extends Component {
 
 
 
-export default SearchBar;
+export default withRouter(SearchBar);

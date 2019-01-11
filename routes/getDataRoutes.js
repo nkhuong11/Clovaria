@@ -91,25 +91,26 @@ router.get('/posts/:user_id', (req, res) => {
 
 router.get('/user/:username', (req, res) => {
     const username = req.params.username;
-    User.findOne({username: username}).select('-password')
+    User.findOne({username: username}).select('-password').populate('posts', 'image_url')
         .exec()
-        .then(user => {
-                if(!user) {
+        .then(doc => {
+                if(!doc) {
                     error = 'User not found'
                     return res.status(404).json(error);
                 }   
                             
-                const result = {
-                    _id: user.id,
-                    username: user.username,
-                    email: user.email,
-                    avatar: user.avatar,
-                    friend_list: user.friend_list
+                const data = {
+                    _id: doc.id,
+                    username: doc.username,
+                    email: doc.email,
+                    avatar: doc.avatar,
+                    friend_list: doc.friend_list,
+                    posts: doc.posts,
                 }
 
                 res.json({
                     success: true,
-                    user: result
+                    user: data
                 });
         });
 });

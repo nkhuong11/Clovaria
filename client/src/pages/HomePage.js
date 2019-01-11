@@ -17,8 +17,8 @@ class HomePage extends Component {
         this.updatePost = this.updatePost.bind(this);
         this.renderPost = this.renderPost.bind(this);       
 
-        this.props.socket.on('NEW UPDATE POST SIGNAL', (userID) => {
-            console.log(userID);
+        this.props.socket.on('UPDATE NEW POST SIGNAL', (data) => {
+            this.updatePost(data.post);
         })
     }
     
@@ -46,7 +46,7 @@ class HomePage extends Component {
 
     updatePost(post){
         this.setState(prevState => ({
-            posts: [...prevState.posts, post]
+            posts: [post, ...prevState.posts]
         }))
     }
 

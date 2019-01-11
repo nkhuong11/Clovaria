@@ -56,8 +56,7 @@ class PostEditor extends Component {
                 if(res.data.success) {
                     console.log(res.data);
                     this.props.updatePost(res.data.post);
-
-                    this.props.socket.emit('SEND UPDATE POST SIGNAL TO FRIEND', this.props.user.friend_list);
+                    this.props.socket.emit('SEND UPDATE POST SIGNAL TO FRIEND', { friend_list: this.props.user.friend_list, post: res.data.post});
                 }
             })
             .catch(err => {
@@ -113,7 +112,7 @@ class PostEditor extends Component {
                                 <hr/>
                                 {
                                     this.state.showImageReview && this.state.reviewImageURL !== '' &&
-                                    <div>
+                                    <div className="center-item">
                                         <img  className="review-image" src={this.state.reviewImageURL}/> 
                                     </div>
                                 }
