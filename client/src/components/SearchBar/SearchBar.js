@@ -66,6 +66,7 @@ class SearchBar extends Component {
                 const {success} = res.data;
                 if(success) {
                     //fetch current user => Update after add friend.
+                    this.props.socket.emit('SEND ADDFRIEND SIGNAL', {friend_id: user._id });
                     axios.post('/api/user/me', { email: this.props.thisUser.email})
                         .then(res => {
                             const { token } = res.data;
@@ -75,6 +76,8 @@ class SearchBar extends Component {
                             console.log(decoded);
                             this.props.setCurrentUser(decoded);
                     })
+
+                    
                 }
             })
             .catch(err => {
@@ -92,6 +95,7 @@ class SearchBar extends Component {
                 console.log(res.data.message)
                 if(res.data.success) {
                     //fetch current user => Update after add friend.
+                    this.props.socket.emit('SEND UNFRIEND SIGNAL', {friend_id: user._id });
                     axios.post('/api/user/me', { email: this.props.thisUser.email})
                         .then(res => {
                             const { token } = res.data;

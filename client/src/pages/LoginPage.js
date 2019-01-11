@@ -40,7 +40,7 @@ class LoginPage extends Component {
                 id: this.props.auth.user._id,
                 friend_list: this.props.auth.user.friend_list
             }
-            this.props.socket.emit('user login', user); //emit login signal
+            this.props.socket.emit('USER LOGIN', user); //emit login signal
             this.props.history.push('/');
         }
     }
@@ -52,7 +52,7 @@ class LoginPage extends Component {
                 id: nextProps.auth.user._id,
                 friend_list: nextProps.auth.user.friend_list
             }
-            this.props.socket.emit('user login', user);
+            this.props.socket.emit('USER LOGIN', user);
             this.props.history.push('/')
         }
 

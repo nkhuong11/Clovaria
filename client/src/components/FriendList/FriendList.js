@@ -25,27 +25,27 @@ class FriendList extends Component {
         this.getActiveFriendList = this.getActiveFriendList.bind(this);
         this.updateOnlineFriendList = this.updateOnlineFriendList.bind(this);
 
-        this.props.socket.on('response active friend list', (activeFriendList) => {
-            console.log('response active friend list: ', activeFriendList);
+        this.props.socket.on('RESPONSE ACTIVE FRIEND LIST', (activeFriendList) => {
+            console.log('RESPONSE ACTIVE FRIEND LIST: ', activeFriendList);
             this.updateOnlineFriendList(activeFriendList);
         })
 
-        this.props.socket.on('update active users', (activeUsers) => {
+        this.props.socket.on('UPDATE ACTIVE USERS', (activeUsers) => {
             console.log(activeUsers);
         })
 
-        this.props.socket.on('new online signal', (userID) => {
-            console.log('new online signal');
+        this.props.socket.on('NEW ONLINE SIGNAL', (userID) => {
+            console.log('NEW ONLINE SIGNAL');
             this.updateOnlineFriendList([userID]);
         })
 
-        this.props.socket.on('new offline signal', (userID) => {
-            console.log('new offline signal');
+        this.props.socket.on('NEW OFFLINE SIGNAL', (userID) => {
+            console.log('NEW OFFLINE SIGNAL');
             this.updateOfflineFriendList([userID]);
         })
 
 
-        this.props.socket.on('receive message', (data) => {
+        this.props.socket.on('RECEIVE MESSAGE', (data) => {
             this.autoOpenChatBox(data.id, data.message);
         })
 
@@ -73,8 +73,8 @@ class FriendList extends Component {
     }
 
     getActiveFriendList(friend_list) {
-        console.log('request active friend list', friend_list);
-        this.props.socket.emit('request active friend list', friend_list);
+        console.log('REQUEST ACTIVE FRIEND LIST', friend_list);
+        this.props.socket.emit('REQUEST ACTIVE FRIEND LIST', friend_list);
     }
     
     componentDidMount() {

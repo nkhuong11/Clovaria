@@ -24,7 +24,7 @@ class ChatBox extends Component {
         this.updateMessage = this.updateMessage.bind(this);
         this.renderMessages = this.renderMessages.bind(this);
         this.isOnline = this.isOnline.bind(this);
-        this.props.socket.on('receive message', (data) => {
+        this.props.socket.on('RECEIVE MESSAGE', (data) => {
             this.updateMessage(data)
         })
         
@@ -41,7 +41,7 @@ class ChatBox extends Component {
     }
 
     onEnterPress(mess) {
-        this.props.socket.emit('send message', {toID: this.props.user._id, message: mess});
+        this.props.socket.emit('SEND MESSAGE', {toID: this.props.user._id, message: mess});
         this.setState(prevState  => ({
                 messageHistory: [...prevState.messageHistory, 
                     {

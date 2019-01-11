@@ -42,8 +42,7 @@ class Socket {
 
 
     updateConnectedUsers(){
-        //using for new register
-        this.io.emit('update active users', Object.keys(connectedUsers));
+        this.io.emit('UPDATE ACTIVE USERS', Object.keys(connectedUsers));
     }
 
     getActiveFriendList(friendList, socket){
@@ -55,7 +54,7 @@ class Socket {
                     activeFriendList.push(friendList[i])
                 }
             }
-            socket.emit('response active friend list', activeFriendList);
+            socket.emit('RESPONSE ACTIVE FRIEND LIST', activeFriendList);
         }
         return;
     }
@@ -63,40 +62,40 @@ class Socket {
     socketEvents() {
 
         this.io.on('connection', (socket) => {
-            console.log("New access")
-            socket.on('user login', (user) => {
+            console.log('NEW ACCESS')
+            socket.on('USER LOGIN', (user) => {
                 if (user.id in connectedUsers){
-                    this.sendSignalToFriends('new online signal', user.friend_list, socket);
+                    this.sendSignalToFriends('NEW ONLINE SIGNAL', user.friend_list, socket);
                     this.getActiveFriendList(user.friend_list,socket);
                 } else {
                     socket.userID = user.id;
                     connectedUsers[user.id] = socket;
                     this.updateConnectedUsers();
-                    this.sendSignalToFriends('new online signal', user.friend_list, socket);
+                    this.sendSignalToFriends('NEW ONLINE SIGNAL', user.friend_list, socket);
                     this.getActiveFriendList(user.friend_list,socket);
                 }    
-                console.log('connectedUsers: ', Object.keys(connectedUsers));
+                console.log('CONNECTED USERS: ', Object.keys(connectedUsers));
             });
 
-            socket.on('user logout', (user) => {
-                console.log('User logout');
-                this.sendSignalToFriends('new offline signal', user.friend_list, socket);
+            socket.on('USER LOGOUT', (user) => {
+                console.log('USER LOGOUT');
+                this.sendSignalToFriends('NEW OFFLINE SIGNAL', user.friend_list, socket);
                 delete connectedUsers[user.id];
                 this.updateConnectedUsers();
-                console.log('connectedUsers: ', Object.keys(connectedUsers));
+                console.log('CONNECTED USERS: ', Object.keys(connectedUsers));
             });
 
-            socket.on('request active friend list', (friendList) => {
+            socket.on('REQUEST ACTIVE FRIEND LIST', (friendList) => {
                 console.log(friendList)
                 this.getActiveFriendList(friendList,socket);
             })
 
-            socket.on('send message', (data) => {
-                //userID: id of friend that we send message to
+            socket.on('SEND MESSAGE', (data) => {
+                //userID: id of friend that we SEND MESSAGE to
                 if (data.toID in connectedUsers){
                     //if this user is online
-                    //connectedUsers[data.toID].emit('receive message', {id: socket.id, message: data.message});
-                    this.io.to(connectedUsers[data.toID].id).emit('receive message', {id: socket.userID, message: data.message});
+                    //connectedUsers[data.toID].emit('RECEIVE MESSAGE', {id: socket.id, message: data.message});
+                    this.io.to(connectedUsers[data.toID].id).emit('RECEIVE MESSAGE', {id: socket.userID, message: data.message});
                 }
             });
 
@@ -105,13 +104,30 @@ class Socket {
                 this.sendNewPostToFriends('UPDATE NEW POST SIGNAL', friend_list, post, socket);
             })
             
+
+            socket.on('SEND ADDFRIEND SIGNAL', (data) => {
+                const {friend_id} = data;
+                if (friend_id in connectedUsers){
+                    //if this user is online => refetch to update this user
+                    this.io.to(connectedUsers[friend_id].id).emit('UPDATE USER INFORMATION', {new_friend_id: socket.userID});
+                }
+            })
+
+            socket.on('SEND UNFRIEND SIGNAL', (data) => {
+                const {friend_id} = data;
+                if (friend_id in connectedUsers){
+                    //if this user is online => refetch to update this user
+                    this.io.to(connectedUsers[friend_id].id).emit('UPDATE USER INFORMATION', {new_friend_id: socket.userID});
+                }
+            })
+            
             socket.on('disconnect', (data) => {
-                console.log("Client left!");
+                console.log("CLIENT LEFT!");
                 if (!socket.id) 
                     return;
                 delete connectedUsers[socket.id];
                 this.updateConnectedUsers();
-                console.log('connectedUsers: ', Object.keys(connectedUsers));
+                console.log('CONNECTED USERS: ', Object.keys(connectedUsers));
             });
 
         });

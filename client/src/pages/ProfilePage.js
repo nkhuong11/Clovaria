@@ -51,7 +51,6 @@ class ProfilePage extends Component {
                 if (this.props.isAuthenticated) {
                     axios.post('/api/user/me', { email: this.props.currentUser.email})
                         .then(res => {
-                            console.log('REEEEEEEEEE', res);
                             const { token } = res.data;
                             localStorage.setItem('jwtToken', token);
                             setAuthToken(token);

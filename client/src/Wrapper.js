@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import { setCurrentUser } from './actions/authentication';
+import setAuthToken from './services/setAuthToken';
 
 import Navbar from './components/Navbar/Navbar';
 import RegisterPage from './pages/RegisterPage';
@@ -16,6 +20,19 @@ class Wrapper extends Component {
         super(props);
         this.checkAuthentication = this.checkAuthentication.bind(this);
         this.checkAuthentication();
+
+        this.props.socket.on('UPDATE USER INFORMATION', (data) => {
+            if (this.props.auth.isAuthenticated) {
+                axios.post('/api/user/me', { email: this.props.auth.user.email})
+                    .then(res => {
+                        const { token } = res.data;
+                        localStorage.setItem('jwtToken', token);
+                        setAuthToken(token);
+                        const decoded = jwt_decode(token);
+                        this.props.setCurrentUser(decoded);
+                })
+            }
+        })
     }
     
     checkAuthentication() {
@@ -26,7 +43,7 @@ class Wrapper extends Component {
                 friend_list: this.props.auth.user.friend_list
             }
             //console.log('WRAPPER checkAuthentication EMIT')
-            this.props.socket.emit('user login', user);
+            this.props.socket.emit('USER LOGIN', user);
         }
     }
 
@@ -53,4 +70,4 @@ const mapStateToProps = (state) => ({
     auth: state.auth,
 })
 
-export default connect(mapStateToProps)(Wrapper)
+export default connect(mapStateToProps, {setCurrentUser})(Wrapper)

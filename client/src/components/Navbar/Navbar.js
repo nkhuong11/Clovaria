@@ -42,7 +42,7 @@ class Navbar extends Component {
                 id: this.props.auth.user._id,
                 friend_list: this.props.auth.user.friend_list
             }
-            this.props.socket.emit('user logout', user);
+            this.props.socket.emit('USER LOGOUT', user);
         } 
     }
 
@@ -50,15 +50,15 @@ class Navbar extends Component {
         const {isAuthenticated, user} = this.props.auth;
 
         const searchBar = (
-            <SearchBar allUser={this.props.allUser} thisUser={this.props.auth.user} setCurrentUser={this.props.setCurrentUser} />
+            <SearchBar allUser={this.props.allUser} thisUser={this.props.auth.user} setCurrentUser={this.props.setCurrentUser} socket={this.props.socket}/>
         )
 
         const authLinks = (
             <ul className="navbar-right-item">
                 <a href="#" className="" onClick={this.onLogout.bind(this)}>
                     <img src={user.avatar} alt={user.username} title={user.username}
-                        className="rounded-circle"
-                        style={{ width: '25px', marginRight: '5px'}} />
+                        className="navbar-user-avatar"
+                        style={{marginRight: '5px'}} />
                             Logout
                 </a>
             </ul>
