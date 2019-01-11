@@ -105,7 +105,7 @@ class Socket {
             })
             
 
-            socket.on('SEND ADDFRIEND SIGNAL', (data) => {
+            socket.on('SEND ADD FRIEND SIGNAL', (data) => {
                 const {friend_id} = data;
                 if (friend_id in connectedUsers){
                     //if this user is online => refetch to update this user

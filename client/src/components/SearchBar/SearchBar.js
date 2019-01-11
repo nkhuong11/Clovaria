@@ -66,7 +66,7 @@ class SearchBar extends Component {
                 const {success} = res.data;
                 if(success) {
                     //fetch current user => Update after add friend.
-                    this.props.socket.emit('SEND ADDFRIEND SIGNAL', {friend_id: user._id });
+                    this.props.socket.emit('SEND ADD FRIEND SIGNAL', {friend_id: user._id });
                     axios.post('/api/user/me', { email: this.props.thisUser.email})
                         .then(res => {
                             const { token } = res.data;
