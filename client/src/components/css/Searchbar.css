@@ -42,8 +42,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    border-bottom: solid 1px #efefef;
-    padding: 8px 8px;
+    border: solid 1px #efefef;
+    padding: 20px 8px;
     height: 100%;
     width: 100%;
     background: #fff;
